@@ -12,6 +12,7 @@ A Go code generator for [Windows Runtime (WinRT)](https://learn.microsoft.com/en
 - **Method filtering** — generate only the methods you need with include/exclude patterns
 - **`go generate` friendly** — designed to run as a `//go:generate` directive
 - **Pure Go** — uses `syscall.SyscallN` via [go-ole](https://github.com/go-ole/go-ole), no CGo dependency
+- **Parameterized GUIDs** — runtime helper to compute GUIDs for generic WinRT types (RFC 4122 v5)
 - **Formatted output** — generated code is automatically processed by `goimports` and `go/format`
 
 ## Installation
@@ -97,6 +98,7 @@ Methods are evaluated in order. Use `-f GetResults -f Close -f '!*'` to generate
 
 ```
 cmd/gowinrt/          CLI entry point
+signature/            Parameterized GUID computation & type signature constants
 internal/
 ├── cli/              Cobra command setup
 ├── gen/
@@ -115,6 +117,22 @@ internal/
 ├── winmd/            WinRT metadata store (wraps go-winmd)
 ├── kernel32/         Heap allocation for delegate VTables
 └── delegate/         Delegate callback registration
+```
+
+### Parameterized GUIDs
+
+Generic WinRT types (e.g. `IAsyncOperation<T>`) don't have a fixed GUID — it must be computed at runtime from the base GUID and the type arguments' signatures. The `signature` package implements this per the [WinRT type system spec](https://docs.microsoft.com/en-us/uwp/winrt-cref/winrt-type-system#guid-generation-for-parameterized-types):
+
+```go
+import "github.com/zandercodes/gowinrt/signature"
+
+// TypedEventHandler<Watcher, ReceivedEventArgs>
+guid := signature.ParameterizedInstanceGUID(
+    "9de1c534-6ae1-11e0-84e1-18a905bcc53f",
+    "rc(Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementWatcher;{a6ac336f-f3d3-4297-8d6c-c81ea6623f40})",
+    "rc(Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementReceivedEventArgs;{27987ddf-e596-41be-8d43-9e6731d4a913})",
+)
+// guid == "{90EB4ECA-D465-5EA0-A61C-033C8C5ECEF2}"
 ```
 
 ### Signature Parser
