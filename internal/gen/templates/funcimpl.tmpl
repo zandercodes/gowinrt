@@ -1,0 +1,94 @@
+{{if .InheritedFrom.Name}}{{/*Inherited method - use QueryInterface*/ -}}
+itf := v.MustQueryInterface(ole.NewGUID({{if .InheritedFrom.Namespace}}{{.InheritedFrom.Namespace}}.{{end}}GUID{{.InheritedFrom.Name}}))
+defer itf.Release()
+baseInterface := (*{{if .InheritedFrom.Namespace}}{{.InheritedFrom.Namespace}}.{{end}}{{.InheritedFrom.Name}})(unsafe.Pointer(itf))
+return baseInterface.{{funcName . -}}(
+    {{- template "paramforwarding.tmpl" . -}}
+)
+{{- /* remove trailing white space*/ -}}
+{{else if .RequiresActivation}}{{/*Activate class*/ -}}
+inspectable, err := ole.RoGetActivationFactory("{{.ExclusiveTo}}", ole.NewGUID(GUID{{.FuncOwner}}))
+if err != nil {
+    return {{range .ReturnParams -}}
+        {{.GoDefaultValue}}, {{end}}err
+}
+v := (*{{.FuncOwner}})(unsafe.Pointer(inspectable))
+
+{{end -}}
+{{if not .InheritedFrom.Name -}}
+{{range (concat .InParams .ReturnParams) -}}
+    {{ if not .IsOut}}{{continue}}{{end -}}
+    {{if eq .GoTypeName "string" -}}
+        {{if .Type.IsArray -}}
+            var {{.GoVarName}}HStr *ole.HString
+        {{else -}}
+            var {{.GoVarName}}HStr ole.HString
+        {{end -}}
+    {{ else -}}
+        var {{.GoVarName}} {{template "variabletype.tmpl" . -}}
+        {{if .Type.IsArray}} = make({{template "variabletype.tmpl" . -}}, {{.GoVarName}}Size){{end}}
+    {{ end -}}
+{{ end -}}
+
+{{range .InParams -}}
+    {{ if .IsOut}}{{continue}}{{end -}}
+    {{if eq .GoTypeName "string" -}}
+        {{.GoVarName}}HStr, err := ole.NewHString({{.GoVarName}})
+        if err != nil{
+            return {{range $.InParams}}{{if .IsOut}}{{.GoDefaultValue}}, {{end}}{{end -}}
+                {{range $.ReturnParams }}{{.GoDefaultValue}}, {{end}}err
+        }
+    {{ end -}}
+{{ end -}}
+hr, _, _ := syscall.SyscallN(
+    v.VTable().{{funcName .}},
+    uintptr(unsafe.Pointer(v)), // this
+    {{range (concat .InParams .ReturnParams) -}}
+        {{if .Type.IsArray -}}
+            uintptr(unsafe.Pointer(&{{.GoVarName}}[0])),   // {{if .IsOut}}out{{else}}in{{end}} {{.GoTypeName}}
+        {{else if .IsOut -}}
+            {{if (or .Type.IsPrimitive .Type.IsEnum) -}}
+                {{if eq .GoTypeName "string" -}}
+                    uintptr(unsafe.Pointer(&{{.GoVarName}}HStr)),   // out {{.GoTypeName}}
+                {{else -}}
+                    uintptr(unsafe.Pointer(&{{.GoVarName}})),   // out {{.GoTypeName}}
+                {{end -}}
+            {{else -}}
+                uintptr(unsafe.Pointer(&{{.GoVarName}})),   // out {{.GoTypeName}}
+            {{end -}}
+        {{else if .Type.IsPointer -}}
+            uintptr(unsafe.Pointer({{.GoVarName}})),   // in {{.GoTypeName}}
+        {{else if (or .Type.IsPrimitive .Type.IsEnum) -}}
+            {{ if eq .GoTypeName "bool" -}}
+                uintptr(*(*byte)(unsafe.Pointer(&{{.GoVarName}}))),   // in {{.GoTypeName}}
+            {{ else if eq .GoTypeName "string" -}}
+                uintptr({{.GoVarName}}HStr),   // in {{.GoTypeName}}
+            {{else -}}
+                uintptr({{.GoVarName}}),   // in {{.GoTypeName}}
+            {{end -}}
+        {{else if .Type.IsGeneric -}}
+            uintptr({{.GoVarName}}),   // in {{.GoTypeName}}
+        {{else -}}
+            uintptr(unsafe.Pointer(&{{.GoVarName}})),   // in {{.GoTypeName}}
+        {{end -}}
+    {{end -}}
+)
+
+if hr != 0 {
+    return {{range .InParams}}{{if .IsOut}}{{.GoDefaultValue}}, {{end}}{{end -}}
+        {{range .ReturnParams }}{{.GoDefaultValue}}, {{end}}ole.NewError(hr)
+}
+
+{{range (concat .InParams .ReturnParams) -}}
+    {{ if not .IsOut}}{{continue}}{{end -}}
+    {{if eq .GoTypeName "string" -}}
+        {{.GoVarName}} := {{.GoVarName}}HStr.String()
+        ole.DeleteHString({{.GoVarName}}HStr)
+    {{ end -}}
+{{ end -}}
+
+
+return {{range .InParams}}{{if .IsOut}}{{.GoVarName}}, {{end}}{{end -}}
+    {{range .ReturnParams }}{{.GoVarName}},{{end}} nil
+{{- /* remove trailing white space*/ -}}
+{{end}}

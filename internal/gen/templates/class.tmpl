@@ -1,0 +1,26 @@
+{{if not .IsAbstract}}
+const Signature{{.Name}} string = "{{.Signature}}"
+
+type {{.Name}} struct {
+    ole.IUnknown
+}
+
+{{if .HasEmptyConstructor}}
+func New{{.Name}}() (*{{.Name}}, error) {
+    inspectable, err := ole.RoActivateInstance("{{.FullyQualifiedName}}")
+    if err != nil {
+        return nil, err
+    }
+    return (*{{.Name}})(unsafe.Pointer(inspectable)), nil
+}
+{{end}}
+{{end}}
+
+{{$owner := .Name}}
+{{range .ImplInterfaces}}
+    {{template "funcext.tmpl" (dict "Funcs" .Funcs "FuncOwner" $owner)}}
+{{end}}
+
+{{range .ExclusiveInterfaces}}
+    {{ template "interface.tmpl" .}}
+{{end}}

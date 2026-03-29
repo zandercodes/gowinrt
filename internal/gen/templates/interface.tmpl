@@ -1,0 +1,28 @@
+const GUID{{.Name}} string = "{{.GUID}}"
+const Signature{{.Name}} string = "{{.Signature}}"
+
+type {{.Name}} struct {
+    ole.IInspectable
+}
+
+type {{.Name}}Vtbl struct {
+    ole.IInspectableVtbl
+
+    {{range .Funcs}}
+    {{- if not .InheritedFrom.Name}}
+    {{funcName .}} uintptr
+    {{- end}}
+    {{- end}}
+}
+
+func (v *{{.Name}}) VTable() *{{.Name}}Vtbl {
+	return (*{{.Name}}Vtbl)(unsafe.Pointer(v.RawVTable))
+}
+
+{{range .Funcs}}
+{{if not .InheritedFrom.Name}}
+{{template "func.tmpl" .}}
+{{end}}
+{{end}}
+
+{{template "funcext.tmpl" (dict "Funcs" .Funcs "FuncOwner" .Name)}}
