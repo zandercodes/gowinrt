@@ -1,6 +1,6 @@
 # gowinrt
 
-A Go code generator for [Windows Runtime (WinRT)](https://learn.microsoft.com/en-us/windows/uwp/winrt-cref/winrt-type-system) APIs. Generate type-safe Go bindings from WinRT metadata (`.winmd`) files and call Windows APIs directly from Go — no CGo required.
+A Go code generator for [Windows Runtime (WinRT)](https://learn.microsoft.com/en-us/uwp/winrt-cref/winrt-type-system) APIs. Generate type-safe Go bindings from WinRT metadata (`.winmd`) files and call Windows APIs directly from Go — no CGo required.
 
 > **Built on [`go-winmd`](https://github.com/microsoft/go-winmd)** — Microsoft's official Go library for reading ECMA-335 / WinRT metadata.
 
