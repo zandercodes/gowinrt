@@ -6,6 +6,7 @@
 package foundation
 
 import (
+	"syscall"
 	"unsafe"
 
 	"github.com/go-ole/go-ole"
@@ -30,4 +31,75 @@ type IAsyncInfoVtbl struct {
 
 func (v *IAsyncInfo) VTable() *IAsyncInfoVtbl {
 	return (*IAsyncInfoVtbl)(unsafe.Pointer(v.RawVTable))
+}
+
+func (v *IAsyncInfo) GetId() (uint32, error) {
+	var out uint32
+	hr, _, _ := syscall.SyscallN(
+		v.VTable().GetId,
+		uintptr(unsafe.Pointer(v)),    // this
+		uintptr(unsafe.Pointer(&out)), // out uint32
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return out, nil
+}
+
+func (v *IAsyncInfo) GetStatus() (AsyncStatus, error) {
+	var out AsyncStatus
+	hr, _, _ := syscall.SyscallN(
+		v.VTable().GetStatus,
+		uintptr(unsafe.Pointer(v)),    // this
+		uintptr(unsafe.Pointer(&out)), // out AsyncStatus
+	)
+
+	if hr != 0 {
+		return AsyncStatusCanceled, ole.NewError(hr)
+	}
+
+	return out, nil
+}
+
+func (v *IAsyncInfo) GetErrorCode() (HResult, error) {
+	var out HResult
+	hr, _, _ := syscall.SyscallN(
+		v.VTable().GetErrorCode,
+		uintptr(unsafe.Pointer(v)),    // this
+		uintptr(unsafe.Pointer(&out)), // out HResult
+	)
+
+	if hr != 0 {
+		return HResult{}, ole.NewError(hr)
+	}
+
+	return out, nil
+}
+
+func (v *IAsyncInfo) Cancel() error {
+	hr, _, _ := syscall.SyscallN(
+		v.VTable().Cancel,
+		uintptr(unsafe.Pointer(v)), // this
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+func (v *IAsyncInfo) Close() error {
+	hr, _, _ := syscall.SyscallN(
+		v.VTable().Close,
+		uintptr(unsafe.Pointer(v)), // this
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
 }

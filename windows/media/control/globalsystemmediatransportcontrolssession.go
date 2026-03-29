@@ -26,6 +26,20 @@ func (impl *GlobalSystemMediaTransportControlsSession) TryGetMediaPropertiesAsyn
 	return v.TryGetMediaPropertiesAsync()
 }
 
+func (impl *GlobalSystemMediaTransportControlsSession) AddMediaPropertiesChanged(handler *foundation.TypedEventHandler) (foundation.EventRegistrationToken, error) {
+	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSession))
+	defer itf.Release()
+	v := (*iGlobalSystemMediaTransportControlsSession)(unsafe.Pointer(itf))
+	return v.AddMediaPropertiesChanged(handler)
+}
+
+func (impl *GlobalSystemMediaTransportControlsSession) RemoveMediaPropertiesChanged(token foundation.EventRegistrationToken) error {
+	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSession))
+	defer itf.Release()
+	v := (*iGlobalSystemMediaTransportControlsSession)(unsafe.Pointer(itf))
+	return v.RemoveMediaPropertiesChanged(token)
+}
+
 const GUIDiGlobalSystemMediaTransportControlsSession string = "7148c835-9b14-5ae2-ab85-dc9b1c14e1a8"
 const SignatureiGlobalSystemMediaTransportControlsSession string = "{7148c835-9b14-5ae2-ab85-dc9b1c14e1a8}"
 
@@ -80,4 +94,34 @@ func (v *iGlobalSystemMediaTransportControlsSession) TryGetMediaPropertiesAsync(
 	}
 
 	return out, nil
+}
+
+func (v *iGlobalSystemMediaTransportControlsSession) AddMediaPropertiesChanged(handler *foundation.TypedEventHandler) (foundation.EventRegistrationToken, error) {
+	var out foundation.EventRegistrationToken
+	hr, _, _ := syscall.SyscallN(
+		v.VTable().AddMediaPropertiesChanged,
+		uintptr(unsafe.Pointer(v)),       // this
+		uintptr(unsafe.Pointer(handler)), // in foundation.TypedEventHandler
+		uintptr(unsafe.Pointer(&out)),    // out foundation.EventRegistrationToken
+	)
+
+	if hr != 0 {
+		return foundation.EventRegistrationToken{}, ole.NewError(hr)
+	}
+
+	return out, nil
+}
+
+func (v *iGlobalSystemMediaTransportControlsSession) RemoveMediaPropertiesChanged(token foundation.EventRegistrationToken) error {
+	hr, _, _ := syscall.SyscallN(
+		v.VTable().RemoveMediaPropertiesChanged,
+		uintptr(unsafe.Pointer(v)),      // this
+		uintptr(unsafe.Pointer(&token)), // in foundation.EventRegistrationToken
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
 }

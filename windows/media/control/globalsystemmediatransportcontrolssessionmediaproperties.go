@@ -10,8 +10,6 @@ import (
 	"unsafe"
 
 	"github.com/go-ole/go-ole"
-	"github.com/zandercodes/gowinrt/windows/foundation"
-	"github.com/zandercodes/gowinrt/windows/foundation/collections"
 	"github.com/zandercodes/gowinrt/windows/storage/streams"
 )
 
@@ -28,60 +26,11 @@ func (impl *GlobalSystemMediaTransportControlsSessionMediaProperties) GetTitle()
 	return v.GetTitle()
 }
 
-func (impl *GlobalSystemMediaTransportControlsSessionMediaProperties) GetSubtitle() (string, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionMediaProperties))
-	defer itf.Release()
-	v := (*iGlobalSystemMediaTransportControlsSessionMediaProperties)(unsafe.Pointer(itf))
-	return v.GetSubtitle()
-}
-
-func (impl *GlobalSystemMediaTransportControlsSessionMediaProperties) GetAlbumArtist() (string, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionMediaProperties))
-	defer itf.Release()
-	v := (*iGlobalSystemMediaTransportControlsSessionMediaProperties)(unsafe.Pointer(itf))
-	return v.GetAlbumArtist()
-}
-
 func (impl *GlobalSystemMediaTransportControlsSessionMediaProperties) GetArtist() (string, error) {
 	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionMediaProperties))
 	defer itf.Release()
 	v := (*iGlobalSystemMediaTransportControlsSessionMediaProperties)(unsafe.Pointer(itf))
 	return v.GetArtist()
-}
-
-func (impl *GlobalSystemMediaTransportControlsSessionMediaProperties) GetAlbumTitle() (string, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionMediaProperties))
-	defer itf.Release()
-	v := (*iGlobalSystemMediaTransportControlsSessionMediaProperties)(unsafe.Pointer(itf))
-	return v.GetAlbumTitle()
-}
-
-func (impl *GlobalSystemMediaTransportControlsSessionMediaProperties) GetTrackNumber() (int32, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionMediaProperties))
-	defer itf.Release()
-	v := (*iGlobalSystemMediaTransportControlsSessionMediaProperties)(unsafe.Pointer(itf))
-	return v.GetTrackNumber()
-}
-
-func (impl *GlobalSystemMediaTransportControlsSessionMediaProperties) GetGenres() (*collections.IVectorView, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionMediaProperties))
-	defer itf.Release()
-	v := (*iGlobalSystemMediaTransportControlsSessionMediaProperties)(unsafe.Pointer(itf))
-	return v.GetGenres()
-}
-
-func (impl *GlobalSystemMediaTransportControlsSessionMediaProperties) GetAlbumTrackCount() (int32, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionMediaProperties))
-	defer itf.Release()
-	v := (*iGlobalSystemMediaTransportControlsSessionMediaProperties)(unsafe.Pointer(itf))
-	return v.GetAlbumTrackCount()
-}
-
-func (impl *GlobalSystemMediaTransportControlsSessionMediaProperties) GetPlaybackType() (*foundation.IReference, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionMediaProperties))
-	defer itf.Release()
-	v := (*iGlobalSystemMediaTransportControlsSessionMediaProperties)(unsafe.Pointer(itf))
-	return v.GetPlaybackType()
 }
 
 func (impl *GlobalSystemMediaTransportControlsSessionMediaProperties) GetThumbnail() (*streams.IRandomAccessStreamReference, error) {
@@ -134,40 +83,6 @@ func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) GetTitle() (
 	return out, nil
 }
 
-func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) GetSubtitle() (string, error) {
-	var outHStr ole.HString
-	hr, _, _ := syscall.SyscallN(
-		v.VTable().GetSubtitle,
-		uintptr(unsafe.Pointer(v)),        // this
-		uintptr(unsafe.Pointer(&outHStr)), // out string
-	)
-
-	if hr != 0 {
-		return "", ole.NewError(hr)
-	}
-
-	out := outHStr.String()
-	ole.DeleteHString(outHStr)
-	return out, nil
-}
-
-func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) GetAlbumArtist() (string, error) {
-	var outHStr ole.HString
-	hr, _, _ := syscall.SyscallN(
-		v.VTable().GetAlbumArtist,
-		uintptr(unsafe.Pointer(v)),        // this
-		uintptr(unsafe.Pointer(&outHStr)), // out string
-	)
-
-	if hr != 0 {
-		return "", ole.NewError(hr)
-	}
-
-	out := outHStr.String()
-	ole.DeleteHString(outHStr)
-	return out, nil
-}
-
 func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) GetArtist() (string, error) {
 	var outHStr ole.HString
 	hr, _, _ := syscall.SyscallN(
@@ -182,83 +97,6 @@ func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) GetArtist() 
 
 	out := outHStr.String()
 	ole.DeleteHString(outHStr)
-	return out, nil
-}
-
-func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) GetAlbumTitle() (string, error) {
-	var outHStr ole.HString
-	hr, _, _ := syscall.SyscallN(
-		v.VTable().GetAlbumTitle,
-		uintptr(unsafe.Pointer(v)),        // this
-		uintptr(unsafe.Pointer(&outHStr)), // out string
-	)
-
-	if hr != 0 {
-		return "", ole.NewError(hr)
-	}
-
-	out := outHStr.String()
-	ole.DeleteHString(outHStr)
-	return out, nil
-}
-
-func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) GetTrackNumber() (int32, error) {
-	var out int32
-	hr, _, _ := syscall.SyscallN(
-		v.VTable().GetTrackNumber,
-		uintptr(unsafe.Pointer(v)),    // this
-		uintptr(unsafe.Pointer(&out)), // out int32
-	)
-
-	if hr != 0 {
-		return 0, ole.NewError(hr)
-	}
-
-	return out, nil
-}
-
-func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) GetGenres() (*collections.IVectorView, error) {
-	var out *collections.IVectorView
-	hr, _, _ := syscall.SyscallN(
-		v.VTable().GetGenres,
-		uintptr(unsafe.Pointer(v)),    // this
-		uintptr(unsafe.Pointer(&out)), // out collections.IVectorView
-	)
-
-	if hr != 0 {
-		return nil, ole.NewError(hr)
-	}
-
-	return out, nil
-}
-
-func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) GetAlbumTrackCount() (int32, error) {
-	var out int32
-	hr, _, _ := syscall.SyscallN(
-		v.VTable().GetAlbumTrackCount,
-		uintptr(unsafe.Pointer(v)),    // this
-		uintptr(unsafe.Pointer(&out)), // out int32
-	)
-
-	if hr != 0 {
-		return 0, ole.NewError(hr)
-	}
-
-	return out, nil
-}
-
-func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) GetPlaybackType() (*foundation.IReference, error) {
-	var out *foundation.IReference
-	hr, _, _ := syscall.SyscallN(
-		v.VTable().GetPlaybackType,
-		uintptr(unsafe.Pointer(v)),    // this
-		uintptr(unsafe.Pointer(&out)), // out foundation.IReference
-	)
-
-	if hr != 0 {
-		return nil, ole.NewError(hr)
-	}
-
 	return out, nil
 }
 

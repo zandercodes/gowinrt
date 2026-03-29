@@ -34,72 +34,9 @@ func (impl *IRandomAccessStreamWithContentType) GetSize() (uint64, error) {
 	return v.GetSize()
 }
 
-func (impl *IRandomAccessStreamWithContentType) SetSize(value uint64) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDIRandomAccessStream))
-	defer itf.Release()
-	v := (*IRandomAccessStream)(unsafe.Pointer(itf))
-	return v.SetSize(value)
-}
-
-func (impl *IRandomAccessStreamWithContentType) GetInputStreamAt(position uint64) (*IInputStream, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDIRandomAccessStream))
-	defer itf.Release()
-	v := (*IRandomAccessStream)(unsafe.Pointer(itf))
-	return v.GetInputStreamAt(position)
-}
-
-func (impl *IRandomAccessStreamWithContentType) GetOutputStreamAt(position uint64) (*IOutputStream, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDIRandomAccessStream))
-	defer itf.Release()
-	v := (*IRandomAccessStream)(unsafe.Pointer(itf))
-	return v.GetOutputStreamAt(position)
-}
-
-func (impl *IRandomAccessStreamWithContentType) GetPosition() (uint64, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDIRandomAccessStream))
-	defer itf.Release()
-	v := (*IRandomAccessStream)(unsafe.Pointer(itf))
-	return v.GetPosition()
-}
-
-func (impl *IRandomAccessStreamWithContentType) Seek(position uint64) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDIRandomAccessStream))
-	defer itf.Release()
-	v := (*IRandomAccessStream)(unsafe.Pointer(itf))
-	return v.Seek(position)
-}
-
-func (impl *IRandomAccessStreamWithContentType) CloneStream() (*IRandomAccessStream, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDIRandomAccessStream))
-	defer itf.Release()
-	v := (*IRandomAccessStream)(unsafe.Pointer(itf))
-	return v.CloneStream()
-}
-
-func (impl *IRandomAccessStreamWithContentType) GetCanRead() (bool, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDIRandomAccessStream))
-	defer itf.Release()
-	v := (*IRandomAccessStream)(unsafe.Pointer(itf))
-	return v.GetCanRead()
-}
-
-func (impl *IRandomAccessStreamWithContentType) GetCanWrite() (bool, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDIRandomAccessStream))
-	defer itf.Release()
-	v := (*IRandomAccessStream)(unsafe.Pointer(itf))
-	return v.GetCanWrite()
-}
-
 func (impl *IRandomAccessStreamWithContentType) ReadAsync(buffer *IBuffer, count uint32, options InputStreamOptions) (*foundation.IAsyncOperationWithProgress, error) {
 	itf := impl.MustQueryInterface(ole.NewGUID(GUIDIInputStream))
 	defer itf.Release()
 	v := (*IInputStream)(unsafe.Pointer(itf))
 	return v.ReadAsync(buffer, count, options)
-}
-
-func (impl *IRandomAccessStreamWithContentType) GetContentType() (string, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDIContentTypeProvider))
-	defer itf.Release()
-	v := (*IContentTypeProvider)(unsafe.Pointer(itf))
-	return v.GetContentType()
 }
