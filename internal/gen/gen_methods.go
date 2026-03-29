@@ -1,12 +1,17 @@
 package gen
 
 import (
+	"errors"
 	"fmt"
 
 	winmd "github.com/microsoft/go-winmd/winmd"
 
 	mdStore "github.com/zandercodes/gowinrt/internal/winmd"
 )
+
+// errReceiveArray is returned when a method uses the WinRT "receive array"
+// pattern (BYREF SZARRAY out-parameter) which the generator does not yet support.
+var errReceiveArray = errors.New("receive-array out-parameter pattern not supported")
 
 // ---- method helpers ----
 
@@ -101,6 +106,10 @@ func (g *generator) genFuncFromMethod(td *mdStore.TypeDef, md *winmd.MethodDef, 
 
 	inParams, err := g.getInParams(curPkg, td, md)
 	if err != nil {
+		if errors.Is(err, errReceiveArray) {
+			g.logger.Warn().Str("method", overloadName).Msg("skipping implementation: receive-array pattern not yet supported")
+			return stub, nil
+		}
 		return nil, fmt.Errorf("parsing params for %s: %w", overloadName, err)
 	}
 
@@ -150,6 +159,18 @@ func (g *generator) getInParams(curPkg string, td *mdStore.TypeDef, md *winmd.Me
 		if param == nil {
 			g.logger.Error().Int("index", i+1).Msg("parameter not found")
 			continue
+		}
+
+		// Detect unsupported "receive array" pattern (BYREF wrapping SZARRAY/ARRAY with Out flag).
+		// In this WinRT ABI pattern the callee allocates the array, which the current
+		// template engine cannot generate correctly.
+		if sp.Type.Kind == winmd.ElementType_BYREF {
+			if inner, ok := sp.Type.Value.(winmd.SigType); ok {
+				if (inner.Kind == winmd.ElementType_SZARRAY || inner.Kind == winmd.ElementType_ARRAY) &&
+					param.Flags&winmd.ParamAttributes_Out != 0 {
+					return nil, errReceiveArray
+				}
+			}
 		}
 
 		// Array parameters need a preceding size param
