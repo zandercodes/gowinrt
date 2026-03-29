@@ -4,7 +4,7 @@
  * Created Date: 2026‑03‑29T01:28:58.5858+01:00
  * Author: ZanderCodes (Julian Zander) <admin@zandercodes.com>
  *
- * Last Modified: 2026‑03‑29T17:44:17.1717+02:00
+ * Last Modified: 2026‑03‑29T18:17:15.1515+02:00
  * Modified By: ZanderCodes (Julian Zander) <admin@zandercodes.com>
  *
  * Copyright © 2026 ZanderCodes (Julian Zander). All rights reserved.
@@ -51,6 +51,7 @@ package gowinrt
 //go:generate go run ./cmd/gowinrt -v --class Windows.Devices.Bluetooth.BluetoothAddressType
 //go:generate go run ./cmd/gowinrt -v --class Windows.Devices.Bluetooth.BluetoothDeviceId --method-filter !FromId
 //go:generate go run ./cmd/gowinrt -v --class Windows.Devices.Bluetooth.BluetoothCacheMode
+//go:generate go run ./cmd/gowinrt -v --class Windows.Devices.Bluetooth.BluetoothError
 
 //go:generate go run ./cmd/gowinrt -v --class Windows.Devices.Bluetooth.GenericAttributeProfile.GattSession --method-filter FromDeviceIdAsync --method-filter get_MaintainConnection --method-filter put_MaintainConnection --method-filter get_CanMaintainConnection --method-filter Close --method-filter get_MaxPduSize --method-filter add_MaxPduSizeChanged --method-filter remove_MaxPduSizeChanged --method-filter !*
 //go:generate go run ./cmd/gowinrt -v --class Windows.Devices.Bluetooth.GenericAttributeProfile.GattDeviceServicesResult --method-filter !get_ProtocolError
