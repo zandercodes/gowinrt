@@ -202,6 +202,10 @@ func (v *IClosable) Close() error {
 }
 ```
 
+## Known Limitations
+
+- **Receive-array out-parameters** — WinRT methods that use the "receive array" pattern (`BYREF SZARRAY` with `Out` flag, e.g. `IPropertyValue.GetUInt8Array`) are not yet implemented. The VTable entries are generated to preserve correct interface layout, but no Go wrapper is emitted. The generator logs a warning for each skipped method.
+
 ## Dependencies
 
 | Package | Purpose |
