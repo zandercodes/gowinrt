@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureBluetoothLEAdvertisementWatcher string = "rc(Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementWatcher;{a6ac336f-f3d3-4297-8d6c-c81ea6623f40})"
 
 type BluetoothLEAdvertisementWatcher struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func NewBluetoothLEAdvertisementWatcher() (*BluetoothLEAdvertisementWatcher, error) {
-	inspectable, err := ole.RoActivateInstance("Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementWatcher")
+	inspectable, err := winrt.RoActivateInstance("Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementWatcher")
 	if err != nil {
 		return nil, err
 	}
@@ -28,77 +28,77 @@ func NewBluetoothLEAdvertisementWatcher() (*BluetoothLEAdvertisementWatcher, err
 }
 
 func (impl *BluetoothLEAdvertisementWatcher) GetStatus() (BluetoothLEAdvertisementWatcherStatus, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementWatcher)(unsafe.Pointer(itf))
 	return v.GetStatus()
 }
 
 func (impl *BluetoothLEAdvertisementWatcher) GetScanningMode() (BluetoothLEScanningMode, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementWatcher)(unsafe.Pointer(itf))
 	return v.GetScanningMode()
 }
 
 func (impl *BluetoothLEAdvertisementWatcher) SetScanningMode(value BluetoothLEScanningMode) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementWatcher)(unsafe.Pointer(itf))
 	return v.SetScanningMode(value)
 }
 
 func (impl *BluetoothLEAdvertisementWatcher) Start() error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementWatcher)(unsafe.Pointer(itf))
 	return v.Start()
 }
 
 func (impl *BluetoothLEAdvertisementWatcher) Stop() error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementWatcher)(unsafe.Pointer(itf))
 	return v.Stop()
 }
 
 func (impl *BluetoothLEAdvertisementWatcher) AddReceived(handler *foundation.TypedEventHandler) (foundation.EventRegistrationToken, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementWatcher)(unsafe.Pointer(itf))
 	return v.AddReceived(handler)
 }
 
 func (impl *BluetoothLEAdvertisementWatcher) RemoveReceived(token foundation.EventRegistrationToken) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementWatcher)(unsafe.Pointer(itf))
 	return v.RemoveReceived(token)
 }
 
 func (impl *BluetoothLEAdvertisementWatcher) AddStopped(handler *foundation.TypedEventHandler) (foundation.EventRegistrationToken, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementWatcher)(unsafe.Pointer(itf))
 	return v.AddStopped(handler)
 }
 
 func (impl *BluetoothLEAdvertisementWatcher) RemoveStopped(token foundation.EventRegistrationToken) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementWatcher))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementWatcher)(unsafe.Pointer(itf))
 	return v.RemoveStopped(token)
 }
 
 func (impl *BluetoothLEAdvertisementWatcher) GetAllowExtendedAdvertisements() (bool, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementWatcher2))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementWatcher2))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementWatcher2)(unsafe.Pointer(itf))
 	return v.GetAllowExtendedAdvertisements()
 }
 
 func (impl *BluetoothLEAdvertisementWatcher) SetAllowExtendedAdvertisements(value bool) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementWatcher2))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementWatcher2))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementWatcher2)(unsafe.Pointer(itf))
 	return v.SetAllowExtendedAdvertisements(value)
@@ -108,11 +108,11 @@ const GUIDiBluetoothLEAdvertisementWatcher string = "a6ac336f-f3d3-4297-8d6c-c81
 const SignatureiBluetoothLEAdvertisementWatcher string = "{a6ac336f-f3d3-4297-8d6c-c81ea6623f40}"
 
 type iBluetoothLEAdvertisementWatcher struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEAdvertisementWatcherVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetMinSamplingInterval  uintptr
 	GetMaxSamplingInterval  uintptr
@@ -146,7 +146,7 @@ func (v *iBluetoothLEAdvertisementWatcher) GetStatus() (BluetoothLEAdvertisement
 	)
 
 	if hr != 0 {
-		return BluetoothLEAdvertisementWatcherStatusCreated, ole.NewError(hr)
+		return BluetoothLEAdvertisementWatcherStatusCreated, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -161,7 +161,7 @@ func (v *iBluetoothLEAdvertisementWatcher) GetScanningMode() (BluetoothLEScannin
 	)
 
 	if hr != 0 {
-		return BluetoothLEScanningModePassive, ole.NewError(hr)
+		return BluetoothLEScanningModePassive, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -175,7 +175,7 @@ func (v *iBluetoothLEAdvertisementWatcher) SetScanningMode(value BluetoothLEScan
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -188,7 +188,7 @@ func (v *iBluetoothLEAdvertisementWatcher) Start() error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -201,7 +201,7 @@ func (v *iBluetoothLEAdvertisementWatcher) Stop() error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -217,7 +217,7 @@ func (v *iBluetoothLEAdvertisementWatcher) AddReceived(handler *foundation.Typed
 	)
 
 	if hr != 0 {
-		return foundation.EventRegistrationToken{}, ole.NewError(hr)
+		return foundation.EventRegistrationToken{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -231,7 +231,7 @@ func (v *iBluetoothLEAdvertisementWatcher) RemoveReceived(token foundation.Event
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -247,7 +247,7 @@ func (v *iBluetoothLEAdvertisementWatcher) AddStopped(handler *foundation.TypedE
 	)
 
 	if hr != 0 {
-		return foundation.EventRegistrationToken{}, ole.NewError(hr)
+		return foundation.EventRegistrationToken{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -261,7 +261,7 @@ func (v *iBluetoothLEAdvertisementWatcher) RemoveStopped(token foundation.EventR
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -271,11 +271,11 @@ const GUIDiBluetoothLEAdvertisementWatcher2 string = "01bf26bc-b164-5805-90a3-e8
 const SignatureiBluetoothLEAdvertisementWatcher2 string = "{01bf26bc-b164-5805-90a3-e8a7997ff225}"
 
 type iBluetoothLEAdvertisementWatcher2 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEAdvertisementWatcher2Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetAllowExtendedAdvertisements uintptr
 	SetAllowExtendedAdvertisements uintptr
@@ -294,7 +294,7 @@ func (v *iBluetoothLEAdvertisementWatcher2) GetAllowExtendedAdvertisements() (bo
 	)
 
 	if hr != 0 {
-		return false, ole.NewError(hr)
+		return false, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -308,7 +308,7 @@ func (v *iBluetoothLEAdvertisementWatcher2) SetAllowExtendedAdvertisements(value
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -318,11 +318,11 @@ const GUIDiBluetoothLEAdvertisementWatcher3 string = "14d980be-4002-5dbe-8519-ff
 const SignatureiBluetoothLEAdvertisementWatcher3 string = "{14d980be-4002-5dbe-8519-ffca6ca389f0}"
 
 type iBluetoothLEAdvertisementWatcher3 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEAdvertisementWatcher3Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetUseUncoded1MPhy   uintptr
 	SetUseUncoded1MPhy   uintptr

@@ -9,17 +9,17 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureBluetoothLEAdvertisementPublisher string = "rc(Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementPublisher;{cde820f9-d9fa-43d6-a264-ddd8b7da8b78})"
 
 type BluetoothLEAdvertisementPublisher struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func NewBluetoothLEAdvertisementPublisher() (*BluetoothLEAdvertisementPublisher, error) {
-	inspectable, err := ole.RoActivateInstance("Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementPublisher")
+	inspectable, err := winrt.RoActivateInstance("Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementPublisher")
 	if err != nil {
 		return nil, err
 	}
@@ -27,28 +27,28 @@ func NewBluetoothLEAdvertisementPublisher() (*BluetoothLEAdvertisementPublisher,
 }
 
 func (impl *BluetoothLEAdvertisementPublisher) GetStatus() (BluetoothLEAdvertisementPublisherStatus, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementPublisher))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementPublisher))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementPublisher)(unsafe.Pointer(itf))
 	return v.GetStatus()
 }
 
 func (impl *BluetoothLEAdvertisementPublisher) GetAdvertisement() (*BluetoothLEAdvertisement, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementPublisher))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementPublisher))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementPublisher)(unsafe.Pointer(itf))
 	return v.GetAdvertisement()
 }
 
 func (impl *BluetoothLEAdvertisementPublisher) Start() error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementPublisher))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementPublisher))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementPublisher)(unsafe.Pointer(itf))
 	return v.Start()
 }
 
 func (impl *BluetoothLEAdvertisementPublisher) Stop() error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementPublisher))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementPublisher))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementPublisher)(unsafe.Pointer(itf))
 	return v.Stop()
@@ -58,11 +58,11 @@ const GUIDiBluetoothLEAdvertisementPublisher string = "cde820f9-d9fa-43d6-a264-d
 const SignatureiBluetoothLEAdvertisementPublisher string = "{cde820f9-d9fa-43d6-a264-ddd8b7da8b78}"
 
 type iBluetoothLEAdvertisementPublisher struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEAdvertisementPublisherVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetStatus           uintptr
 	GetAdvertisement    uintptr
@@ -85,7 +85,7 @@ func (v *iBluetoothLEAdvertisementPublisher) GetStatus() (BluetoothLEAdvertiseme
 	)
 
 	if hr != 0 {
-		return BluetoothLEAdvertisementPublisherStatusCreated, ole.NewError(hr)
+		return BluetoothLEAdvertisementPublisherStatusCreated, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -100,7 +100,7 @@ func (v *iBluetoothLEAdvertisementPublisher) GetAdvertisement() (*BluetoothLEAdv
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -113,7 +113,7 @@ func (v *iBluetoothLEAdvertisementPublisher) Start() error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -126,7 +126,7 @@ func (v *iBluetoothLEAdvertisementPublisher) Stop() error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -136,11 +136,11 @@ const GUIDiBluetoothLEAdvertisementPublisher2 string = "fbdb545e-56f1-510f-a434-
 const SignatureiBluetoothLEAdvertisementPublisher2 string = "{fbdb545e-56f1-510f-a434-217fbd9e7bd2}"
 
 type iBluetoothLEAdvertisementPublisher2 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEAdvertisementPublisher2Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetPreferredTransmitPowerLevelInDBm uintptr
 	SetPreferredTransmitPowerLevelInDBm uintptr
@@ -160,11 +160,11 @@ const GUIDiBluetoothLEAdvertisementPublisher3 string = "1cff3902-61ec-5776-ab86-
 const SignatureiBluetoothLEAdvertisementPublisher3 string = "{1cff3902-61ec-5776-ab86-9b41f94b1e66}"
 
 type iBluetoothLEAdvertisementPublisher3 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEAdvertisementPublisher3Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetPrimaryPhy   uintptr
 	SetPrimaryPhy   uintptr

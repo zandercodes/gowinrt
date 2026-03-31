@@ -9,19 +9,19 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDIRandomAccessStreamReference string = "33ee3134-1dd6-4e3a-8067-d1c162e8642b"
 const SignatureIRandomAccessStreamReference string = "{33ee3134-1dd6-4e3a-8067-d1c162e8642b}"
 
 type IRandomAccessStreamReference struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type IRandomAccessStreamReferenceVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	OpenReadAsync uintptr
 }
@@ -39,7 +39,7 @@ func (v *IRandomAccessStreamReference) OpenReadAsync() (*foundation.IAsyncOperat
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

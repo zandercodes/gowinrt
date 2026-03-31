@@ -9,19 +9,19 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDIInputStream string = "905a0fe2-bc53-11df-8c49-001e4fc686da"
 const SignatureIInputStream string = "{905a0fe2-bc53-11df-8c49-001e4fc686da}"
 
 type IInputStream struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type IInputStreamVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	ReadAsync uintptr
 }
@@ -42,7 +42,7 @@ func (v *IInputStream) ReadAsync(buffer *IBuffer, count uint32, options InputStr
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

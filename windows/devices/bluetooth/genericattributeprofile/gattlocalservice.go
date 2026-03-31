@@ -9,33 +9,33 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation"
 	"github.com/zandercodes/gowinrt/windows/foundation/collections"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattLocalService string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattLocalService;{f513e258-f7f7-4902-b803-57fcc7d6fe83})"
 
 type GattLocalService struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattLocalService) GetUuid() (syscall.GUID, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalService))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalService))
 	defer itf.Release()
 	v := (*iGattLocalService)(unsafe.Pointer(itf))
 	return v.GetUuid()
 }
 
 func (impl *GattLocalService) CreateCharacteristicAsync(characteristicUuid syscall.GUID, parameters *GattLocalCharacteristicParameters) (*foundation.IAsyncOperation, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalService))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalService))
 	defer itf.Release()
 	v := (*iGattLocalService)(unsafe.Pointer(itf))
 	return v.CreateCharacteristicAsync(characteristicUuid, parameters)
 }
 
 func (impl *GattLocalService) GetCharacteristics() (*collections.IVectorView, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalService))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalService))
 	defer itf.Release()
 	v := (*iGattLocalService)(unsafe.Pointer(itf))
 	return v.GetCharacteristics()
@@ -45,11 +45,11 @@ const GUIDiGattLocalService string = "f513e258-f7f7-4902-b803-57fcc7d6fe83"
 const SignatureiGattLocalService string = "{f513e258-f7f7-4902-b803-57fcc7d6fe83}"
 
 type iGattLocalService struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattLocalServiceVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetUuid                   uintptr
 	CreateCharacteristicAsync uintptr
@@ -69,7 +69,7 @@ func (v *iGattLocalService) GetUuid() (syscall.GUID, error) {
 	)
 
 	if hr != 0 {
-		return syscall.GUID{}, ole.NewError(hr)
+		return syscall.GUID{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -86,7 +86,7 @@ func (v *iGattLocalService) CreateCharacteristicAsync(characteristicUuid syscall
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -101,7 +101,7 @@ func (v *iGattLocalService) GetCharacteristics() (*collections.IVectorView, erro
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

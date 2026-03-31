@@ -9,67 +9,67 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattServiceProvider string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattServiceProvider;{7822b3cd-2889-4f86-a051-3f0aed1c2760})"
 
 type GattServiceProvider struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattServiceProvider) GetService() (*GattLocalService, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProvider))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProvider))
 	defer itf.Release()
 	v := (*iGattServiceProvider)(unsafe.Pointer(itf))
 	return v.GetService()
 }
 
 func (impl *GattServiceProvider) GetAdvertisementStatus() (GattServiceProviderAdvertisementStatus, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProvider))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProvider))
 	defer itf.Release()
 	v := (*iGattServiceProvider)(unsafe.Pointer(itf))
 	return v.GetAdvertisementStatus()
 }
 
 func (impl *GattServiceProvider) AddAdvertisementStatusChanged(handler *foundation.TypedEventHandler) (foundation.EventRegistrationToken, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProvider))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProvider))
 	defer itf.Release()
 	v := (*iGattServiceProvider)(unsafe.Pointer(itf))
 	return v.AddAdvertisementStatusChanged(handler)
 }
 
 func (impl *GattServiceProvider) RemoveAdvertisementStatusChanged(token foundation.EventRegistrationToken) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProvider))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProvider))
 	defer itf.Release()
 	v := (*iGattServiceProvider)(unsafe.Pointer(itf))
 	return v.RemoveAdvertisementStatusChanged(token)
 }
 
 func (impl *GattServiceProvider) StartAdvertising() error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProvider))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProvider))
 	defer itf.Release()
 	v := (*iGattServiceProvider)(unsafe.Pointer(itf))
 	return v.StartAdvertising()
 }
 
 func (impl *GattServiceProvider) StartAdvertisingWithParameters(parameters *GattServiceProviderAdvertisingParameters) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProvider))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProvider))
 	defer itf.Release()
 	v := (*iGattServiceProvider)(unsafe.Pointer(itf))
 	return v.StartAdvertisingWithParameters(parameters)
 }
 
 func (impl *GattServiceProvider) StopAdvertising() error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProvider))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProvider))
 	defer itf.Release()
 	v := (*iGattServiceProvider)(unsafe.Pointer(itf))
 	return v.StopAdvertising()
 }
 
 func (impl *GattServiceProvider) UpdateAdvertisingParameters(parameters *GattServiceProviderAdvertisingParameters) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProvider2))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProvider2))
 	defer itf.Release()
 	v := (*iGattServiceProvider2)(unsafe.Pointer(itf))
 	return v.UpdateAdvertisingParameters(parameters)
@@ -79,11 +79,11 @@ const GUIDiGattServiceProvider string = "7822b3cd-2889-4f86-a051-3f0aed1c2760"
 const SignatureiGattServiceProvider string = "{7822b3cd-2889-4f86-a051-3f0aed1c2760}"
 
 type iGattServiceProvider struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattServiceProviderVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetService                       uintptr
 	GetAdvertisementStatus           uintptr
@@ -107,7 +107,7 @@ func (v *iGattServiceProvider) GetService() (*GattLocalService, error) {
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -122,7 +122,7 @@ func (v *iGattServiceProvider) GetAdvertisementStatus() (GattServiceProviderAdve
 	)
 
 	if hr != 0 {
-		return GattServiceProviderAdvertisementStatusCreated, ole.NewError(hr)
+		return GattServiceProviderAdvertisementStatusCreated, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -138,7 +138,7 @@ func (v *iGattServiceProvider) AddAdvertisementStatusChanged(handler *foundation
 	)
 
 	if hr != 0 {
-		return foundation.EventRegistrationToken{}, ole.NewError(hr)
+		return foundation.EventRegistrationToken{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -152,7 +152,7 @@ func (v *iGattServiceProvider) RemoveAdvertisementStatusChanged(token foundation
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -165,7 +165,7 @@ func (v *iGattServiceProvider) StartAdvertising() error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -179,7 +179,7 @@ func (v *iGattServiceProvider) StartAdvertisingWithParameters(parameters *GattSe
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -192,7 +192,7 @@ func (v *iGattServiceProvider) StopAdvertising() error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -202,11 +202,11 @@ const GUIDiGattServiceProvider2 string = "9ef531a9-cf12-59a3-a81c-362f4aabaacf"
 const SignatureiGattServiceProvider2 string = "{9ef531a9-cf12-59a3-a81c-362f4aabaacf}"
 
 type iGattServiceProvider2 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattServiceProvider2Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	UpdateAdvertisingParameters uintptr
 }
@@ -223,7 +223,7 @@ func (v *iGattServiceProvider2) UpdateAdvertisingParameters(parameters *GattServ
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -233,11 +233,11 @@ const GUIDiGattServiceProviderStatics string = "31794063-5256-4054-a4f4-7bbe7755
 const SignatureiGattServiceProviderStatics string = "{31794063-5256-4054-a4f4-7bbe7755a57e}"
 
 type iGattServiceProviderStatics struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattServiceProviderStaticsVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GattServiceProviderCreateAsync uintptr
 }
@@ -247,7 +247,7 @@ func (v *iGattServiceProviderStatics) VTable() *iGattServiceProviderStaticsVtbl 
 }
 
 func GattServiceProviderCreateAsync(serviceUuid syscall.GUID) (*foundation.IAsyncOperation, error) {
-	inspectable, err := ole.RoGetActivationFactory("Windows.Devices.Bluetooth.GenericAttributeProfile.GattServiceProvider", ole.NewGUID(GUIDiGattServiceProviderStatics))
+	inspectable, err := winrt.RoGetActivationFactory("Windows.Devices.Bluetooth.GenericAttributeProfile.GattServiceProvider", winrt.NewGUID(GUIDiGattServiceProviderStatics))
 	if err != nil {
 		return nil, err
 	}
@@ -262,7 +262,7 @@ func GattServiceProviderCreateAsync(serviceUuid syscall.GUID) (*foundation.IAsyn
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

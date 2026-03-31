@@ -9,17 +9,17 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureDataReader string = "rc(Windows.Storage.Streams.DataReader;{e2b50029-b4c1-4314-a4b8-fb813a2f275e})"
 
 type DataReader struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *DataReader) ReadBytes(valueSize uint32) ([]uint8, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDIDataReader))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDIDataReader))
 	defer itf.Release()
 	v := (*IDataReader)(unsafe.Pointer(itf))
 	return v.ReadBytes(valueSize)
@@ -29,11 +29,11 @@ const GUIDiDataReaderStatics string = "11fcbfc8-f93a-471b-b121-f379e349313c"
 const SignatureiDataReaderStatics string = "{11fcbfc8-f93a-471b-b121-f379e349313c}"
 
 type iDataReaderStatics struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iDataReaderStaticsVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	DataReaderFromBuffer uintptr
 }
@@ -43,7 +43,7 @@ func (v *iDataReaderStatics) VTable() *iDataReaderStaticsVtbl {
 }
 
 func DataReaderFromBuffer(buffer *IBuffer) (*DataReader, error) {
-	inspectable, err := ole.RoGetActivationFactory("Windows.Storage.Streams.DataReader", ole.NewGUID(GUIDiDataReaderStatics))
+	inspectable, err := winrt.RoGetActivationFactory("Windows.Storage.Streams.DataReader", winrt.NewGUID(GUIDiDataReaderStatics))
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func DataReaderFromBuffer(buffer *IBuffer) (*DataReader, error) {
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

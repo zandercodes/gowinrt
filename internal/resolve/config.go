@@ -1,4 +1,4 @@
-package gen
+package resolve
 
 import (
 	"fmt"

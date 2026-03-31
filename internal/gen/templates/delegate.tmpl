@@ -3,14 +3,14 @@ const GUID{{.Name}} string = "{{.GUID}}"
 const Signature{{.Name}} string = "{{.Signature}}"
 
 type {{.Name}} struct {
-	ole.IUnknown
+	winrt.IUnknown
 	sync.Mutex
 	refs uintptr
-	IID  ole.GUID
+	IID  winrt.GUID
 }
 
 type {{.Name}}Vtbl struct {
-	ole.IUnknownVtbl
+	winrt.IUnknownVtbl
 	Invoke uintptr
 }
 
@@ -28,7 +28,7 @@ var releaseChannels{{.Name}} = &{{.Name | toLower}}ReleaseChannels {
 	chans: make(map[unsafe.Pointer]chan struct{}),
 }
 
-func New{{.Name}}(iid *ole.GUID, callback {{.Name}}Callback) *{{.Name}} {
+func New{{.Name}}(iid *winrt.GUID, callback {{.Name}}Callback) *{{.Name}} {
 	size := unsafe.Sizeof(*(*{{.Name}})(nil))
 	instPtr := kernel32.Malloc(size)
 	inst := (*{{.Name}})(instPtr)
@@ -41,7 +41,7 @@ func New{{.Name}}(iid *ole.GUID, callback {{.Name}}Callback) *{{.Name}} {
 	inst.RawVTable = (*interface{})(vTablePtr)
 
 	vTable := (*{{.Name}}Vtbl)(vTablePtr)
-	vTable.IUnknownVtbl = ole.IUnknownVtbl{
+	vTable.IUnknownVtbl = winrt.IUnknownVtbl{
 			QueryInterface: callbacks.QueryInterface,
 			AddRef:         callbacks.AddRef,
 			Release:        callbacks.Release,
@@ -59,7 +59,7 @@ func New{{.Name}}(iid *ole.GUID, callback {{.Name}}Callback) *{{.Name}} {
 	return inst
 }
 
-func (r *{{.Name}}) GetIID() *ole.GUID {
+func (r *{{.Name}}) GetIID() *winrt.GUID {
 	return &r.IID
 }
 
@@ -98,7 +98,7 @@ func (instance *{{.Name}}) Invoke(instancePtr, rawArgs0, rawArgs1, rawArgs2, raw
 	if callback, ok := callbacks{{.Name}}.get(instancePtr); ok {
 		callback(instance, {{range .InParams}}{{.GoVarName}},{{end}})
 	}
-	return ole.S_OK
+	return winrt.S_OK
 }
 
 func (instance *{{.Name}}) AddRef() uintptr {

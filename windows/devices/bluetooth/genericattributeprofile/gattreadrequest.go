@@ -9,61 +9,61 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation"
 	"github.com/zandercodes/gowinrt/windows/storage/streams"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattReadRequest string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattReadRequest;{f1dd6535-6acd-42a6-a4bb-d789dae0043e})"
 
 type GattReadRequest struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattReadRequest) GetOffset() (uint32, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattReadRequest))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattReadRequest))
 	defer itf.Release()
 	v := (*iGattReadRequest)(unsafe.Pointer(itf))
 	return v.GetOffset()
 }
 
 func (impl *GattReadRequest) GetLength() (uint32, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattReadRequest))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattReadRequest))
 	defer itf.Release()
 	v := (*iGattReadRequest)(unsafe.Pointer(itf))
 	return v.GetLength()
 }
 
 func (impl *GattReadRequest) GetState() (GattRequestState, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattReadRequest))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattReadRequest))
 	defer itf.Release()
 	v := (*iGattReadRequest)(unsafe.Pointer(itf))
 	return v.GetState()
 }
 
 func (impl *GattReadRequest) AddStateChanged(handler *foundation.TypedEventHandler) (foundation.EventRegistrationToken, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattReadRequest))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattReadRequest))
 	defer itf.Release()
 	v := (*iGattReadRequest)(unsafe.Pointer(itf))
 	return v.AddStateChanged(handler)
 }
 
 func (impl *GattReadRequest) RemoveStateChanged(token foundation.EventRegistrationToken) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattReadRequest))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattReadRequest))
 	defer itf.Release()
 	v := (*iGattReadRequest)(unsafe.Pointer(itf))
 	return v.RemoveStateChanged(token)
 }
 
 func (impl *GattReadRequest) RespondWithValue(value *streams.IBuffer) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattReadRequest))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattReadRequest))
 	defer itf.Release()
 	v := (*iGattReadRequest)(unsafe.Pointer(itf))
 	return v.RespondWithValue(value)
 }
 
 func (impl *GattReadRequest) RespondWithProtocolError(protocolError uint8) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattReadRequest))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattReadRequest))
 	defer itf.Release()
 	v := (*iGattReadRequest)(unsafe.Pointer(itf))
 	return v.RespondWithProtocolError(protocolError)
@@ -73,11 +73,11 @@ const GUIDiGattReadRequest string = "f1dd6535-6acd-42a6-a4bb-d789dae0043e"
 const SignatureiGattReadRequest string = "{f1dd6535-6acd-42a6-a4bb-d789dae0043e}"
 
 type iGattReadRequest struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattReadRequestVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetOffset                uintptr
 	GetLength                uintptr
@@ -101,7 +101,7 @@ func (v *iGattReadRequest) GetOffset() (uint32, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -116,7 +116,7 @@ func (v *iGattReadRequest) GetLength() (uint32, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -131,7 +131,7 @@ func (v *iGattReadRequest) GetState() (GattRequestState, error) {
 	)
 
 	if hr != 0 {
-		return GattRequestStatePending, ole.NewError(hr)
+		return GattRequestStatePending, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -147,7 +147,7 @@ func (v *iGattReadRequest) AddStateChanged(handler *foundation.TypedEventHandler
 	)
 
 	if hr != 0 {
-		return foundation.EventRegistrationToken{}, ole.NewError(hr)
+		return foundation.EventRegistrationToken{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -161,7 +161,7 @@ func (v *iGattReadRequest) RemoveStateChanged(token foundation.EventRegistration
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -175,7 +175,7 @@ func (v *iGattReadRequest) RespondWithValue(value *streams.IBuffer) error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -189,7 +189,7 @@ func (v *iGattReadRequest) RespondWithProtocolError(protocolError uint8) error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil

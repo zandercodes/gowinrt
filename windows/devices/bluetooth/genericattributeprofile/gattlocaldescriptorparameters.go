@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/storage/streams"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattLocalDescriptorParameters string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattLocalDescriptorParameters;{5fdede6a-f3c1-4b66-8c4b-e3d2293b40e9})"
 
 type GattLocalDescriptorParameters struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func NewGattLocalDescriptorParameters() (*GattLocalDescriptorParameters, error) {
-	inspectable, err := ole.RoActivateInstance("Windows.Devices.Bluetooth.GenericAttributeProfile.GattLocalDescriptorParameters")
+	inspectable, err := winrt.RoActivateInstance("Windows.Devices.Bluetooth.GenericAttributeProfile.GattLocalDescriptorParameters")
 	if err != nil {
 		return nil, err
 	}
@@ -28,42 +28,42 @@ func NewGattLocalDescriptorParameters() (*GattLocalDescriptorParameters, error) 
 }
 
 func (impl *GattLocalDescriptorParameters) SetStaticValue(value *streams.IBuffer) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalDescriptorParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalDescriptorParameters))
 	defer itf.Release()
 	v := (*iGattLocalDescriptorParameters)(unsafe.Pointer(itf))
 	return v.SetStaticValue(value)
 }
 
 func (impl *GattLocalDescriptorParameters) GetStaticValue() (*streams.IBuffer, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalDescriptorParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalDescriptorParameters))
 	defer itf.Release()
 	v := (*iGattLocalDescriptorParameters)(unsafe.Pointer(itf))
 	return v.GetStaticValue()
 }
 
 func (impl *GattLocalDescriptorParameters) SetReadProtectionLevel(value GattProtectionLevel) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalDescriptorParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalDescriptorParameters))
 	defer itf.Release()
 	v := (*iGattLocalDescriptorParameters)(unsafe.Pointer(itf))
 	return v.SetReadProtectionLevel(value)
 }
 
 func (impl *GattLocalDescriptorParameters) GetReadProtectionLevel() (GattProtectionLevel, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalDescriptorParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalDescriptorParameters))
 	defer itf.Release()
 	v := (*iGattLocalDescriptorParameters)(unsafe.Pointer(itf))
 	return v.GetReadProtectionLevel()
 }
 
 func (impl *GattLocalDescriptorParameters) SetWriteProtectionLevel(value GattProtectionLevel) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalDescriptorParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalDescriptorParameters))
 	defer itf.Release()
 	v := (*iGattLocalDescriptorParameters)(unsafe.Pointer(itf))
 	return v.SetWriteProtectionLevel(value)
 }
 
 func (impl *GattLocalDescriptorParameters) GetWriteProtectionLevel() (GattProtectionLevel, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalDescriptorParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalDescriptorParameters))
 	defer itf.Release()
 	v := (*iGattLocalDescriptorParameters)(unsafe.Pointer(itf))
 	return v.GetWriteProtectionLevel()
@@ -73,11 +73,11 @@ const GUIDiGattLocalDescriptorParameters string = "5fdede6a-f3c1-4b66-8c4b-e3d22
 const SignatureiGattLocalDescriptorParameters string = "{5fdede6a-f3c1-4b66-8c4b-e3d2293b40e9}"
 
 type iGattLocalDescriptorParameters struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattLocalDescriptorParametersVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	SetStaticValue          uintptr
 	GetStaticValue          uintptr
@@ -99,7 +99,7 @@ func (v *iGattLocalDescriptorParameters) SetStaticValue(value *streams.IBuffer) 
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -114,7 +114,7 @@ func (v *iGattLocalDescriptorParameters) GetStaticValue() (*streams.IBuffer, err
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -128,7 +128,7 @@ func (v *iGattLocalDescriptorParameters) SetReadProtectionLevel(value GattProtec
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -143,7 +143,7 @@ func (v *iGattLocalDescriptorParameters) GetReadProtectionLevel() (GattProtectio
 	)
 
 	if hr != 0 {
-		return GattProtectionLevelPlain, ole.NewError(hr)
+		return GattProtectionLevelPlain, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -157,7 +157,7 @@ func (v *iGattLocalDescriptorParameters) SetWriteProtectionLevel(value GattProte
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -172,7 +172,7 @@ func (v *iGattLocalDescriptorParameters) GetWriteProtectionLevel() (GattProtecti
 	)
 
 	if hr != 0 {
-		return GattProtectionLevelPlain, ole.NewError(hr)
+		return GattProtectionLevelPlain, winrt.NewError(hr)
 	}
 
 	return out, nil

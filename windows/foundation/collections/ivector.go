@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDIVector string = "913337e9-11a1-4345-a3a2-4e7f956e222d"
 const SignatureIVector string = "{913337e9-11a1-4345-a3a2-4e7f956e222d}"
 
 type IVector struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type IVectorVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetAt       uintptr
 	GetSize     uintptr
@@ -50,7 +50,7 @@ func (v *IVector) GetAt(index uint32) (unsafe.Pointer, error) {
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -65,7 +65,7 @@ func (v *IVector) GetSize() (uint32, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -80,7 +80,7 @@ func (v *IVector) GetView() (*IVectorView, error) {
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -98,7 +98,7 @@ func (v *IVector) IndexOf(value unsafe.Pointer) (uint32, bool, error) {
 	)
 
 	if hr != 0 {
-		return 0, false, ole.NewError(hr)
+		return 0, false, winrt.NewError(hr)
 	}
 
 	return index, out, nil
@@ -113,7 +113,7 @@ func (v *IVector) SetAt(index uint32, value unsafe.Pointer) error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -128,7 +128,7 @@ func (v *IVector) InsertAt(index uint32, value unsafe.Pointer) error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -142,7 +142,7 @@ func (v *IVector) RemoveAt(index uint32) error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -156,7 +156,7 @@ func (v *IVector) Append(value unsafe.Pointer) error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -169,7 +169,7 @@ func (v *IVector) RemoveAtEnd() error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -182,7 +182,7 @@ func (v *IVector) Clear() error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -201,7 +201,7 @@ func (v *IVector) GetMany(startIndex uint32, itemsSize uint32) ([]unsafe.Pointer
 	)
 
 	if hr != 0 {
-		return nil, 0, ole.NewError(hr)
+		return nil, 0, winrt.NewError(hr)
 	}
 
 	return items, out, nil
@@ -216,7 +216,7 @@ func (v *IVector) ReplaceAll(itemsSize uint32, items []unsafe.Pointer) error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil

@@ -10,23 +10,23 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/internal/delegate"
 	"github.com/zandercodes/gowinrt/internal/kernel32"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDAsyncOperationCompletedHandler string = "fcdcf02c-e5d8-4478-915a-4d90b74b83a5"
 const SignatureAsyncOperationCompletedHandler string = "delegate({fcdcf02c-e5d8-4478-915a-4d90b74b83a5})"
 
 type AsyncOperationCompletedHandler struct {
-	ole.IUnknown
+	winrt.IUnknown
 	sync.Mutex
 	refs uintptr
-	IID  ole.GUID
+	IID  winrt.GUID
 }
 
 type AsyncOperationCompletedHandlerVtbl struct {
-	ole.IUnknownVtbl
+	winrt.IUnknownVtbl
 	Invoke uintptr
 }
 
@@ -42,7 +42,7 @@ var releaseChannelsAsyncOperationCompletedHandler = &asyncOperationCompletedHand
 	chans: make(map[unsafe.Pointer]chan struct{}),
 }
 
-func NewAsyncOperationCompletedHandler(iid *ole.GUID, callback AsyncOperationCompletedHandlerCallback) *AsyncOperationCompletedHandler {
+func NewAsyncOperationCompletedHandler(iid *winrt.GUID, callback AsyncOperationCompletedHandlerCallback) *AsyncOperationCompletedHandler {
 	size := unsafe.Sizeof(*(*AsyncOperationCompletedHandler)(nil))
 	instPtr := kernel32.Malloc(size)
 	inst := (*AsyncOperationCompletedHandler)(instPtr)
@@ -55,7 +55,7 @@ func NewAsyncOperationCompletedHandler(iid *ole.GUID, callback AsyncOperationCom
 	inst.RawVTable = (*interface{})(vTablePtr)
 
 	vTable := (*AsyncOperationCompletedHandlerVtbl)(vTablePtr)
-	vTable.IUnknownVtbl = ole.IUnknownVtbl{
+	vTable.IUnknownVtbl = winrt.IUnknownVtbl{
 		QueryInterface: callbacks.QueryInterface,
 		AddRef:         callbacks.AddRef,
 		Release:        callbacks.Release,
@@ -73,7 +73,7 @@ func NewAsyncOperationCompletedHandler(iid *ole.GUID, callback AsyncOperationCom
 	return inst
 }
 
-func (r *AsyncOperationCompletedHandler) GetIID() *ole.GUID {
+func (r *AsyncOperationCompletedHandler) GetIID() *winrt.GUID {
 	return &r.IID
 }
 
@@ -102,7 +102,7 @@ func (instance *AsyncOperationCompletedHandler) Invoke(instancePtr, rawArgs0, ra
 	if callback, ok := callbacksAsyncOperationCompletedHandler.get(instancePtr); ok {
 		callback(instance, asyncInfo, asyncStatus)
 	}
-	return ole.S_OK
+	return winrt.S_OK
 }
 
 func (instance *AsyncOperationCompletedHandler) AddRef() uintptr {

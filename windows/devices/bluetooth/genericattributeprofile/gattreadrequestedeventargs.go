@@ -9,32 +9,32 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattReadRequestedEventArgs string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattReadRequestedEventArgs;{93497243-f39c-484b-8ab6-996ba486cfa3})"
 
 type GattReadRequestedEventArgs struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattReadRequestedEventArgs) GetSession() (*GattSession, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattReadRequestedEventArgs))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattReadRequestedEventArgs))
 	defer itf.Release()
 	v := (*iGattReadRequestedEventArgs)(unsafe.Pointer(itf))
 	return v.GetSession()
 }
 
 func (impl *GattReadRequestedEventArgs) GetDeferral() (*foundation.Deferral, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattReadRequestedEventArgs))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattReadRequestedEventArgs))
 	defer itf.Release()
 	v := (*iGattReadRequestedEventArgs)(unsafe.Pointer(itf))
 	return v.GetDeferral()
 }
 
 func (impl *GattReadRequestedEventArgs) GetRequestAsync() (*foundation.IAsyncOperation, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattReadRequestedEventArgs))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattReadRequestedEventArgs))
 	defer itf.Release()
 	v := (*iGattReadRequestedEventArgs)(unsafe.Pointer(itf))
 	return v.GetRequestAsync()
@@ -44,11 +44,11 @@ const GUIDiGattReadRequestedEventArgs string = "93497243-f39c-484b-8ab6-996ba486
 const SignatureiGattReadRequestedEventArgs string = "{93497243-f39c-484b-8ab6-996ba486cfa3}"
 
 type iGattReadRequestedEventArgs struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattReadRequestedEventArgsVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetSession      uintptr
 	GetDeferral     uintptr
@@ -68,7 +68,7 @@ func (v *iGattReadRequestedEventArgs) GetSession() (*GattSession, error) {
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -83,7 +83,7 @@ func (v *iGattReadRequestedEventArgs) GetDeferral() (*foundation.Deferral, error
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -98,7 +98,7 @@ func (v *iGattReadRequestedEventArgs) GetRequestAsync() (*foundation.IAsyncOpera
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

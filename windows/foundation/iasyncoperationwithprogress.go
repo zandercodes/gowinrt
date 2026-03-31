@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDIAsyncOperationWithProgress string = "b5d036d7-e297-498f-ba60-0289e76e23dd"
 const SignatureIAsyncOperationWithProgress string = "{b5d036d7-e297-498f-ba60-0289e76e23dd}"
 
 type IAsyncOperationWithProgress struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type IAsyncOperationWithProgressVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	SetProgress  uintptr
 	GetProgress  uintptr
@@ -41,7 +41,7 @@ func (v *IAsyncOperationWithProgress) SetProgress(handler *AsyncOperationProgres
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -56,7 +56,7 @@ func (v *IAsyncOperationWithProgress) GetProgress() (*AsyncOperationProgressHand
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -70,7 +70,7 @@ func (v *IAsyncOperationWithProgress) SetCompleted(handler *AsyncOperationWithPr
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -85,7 +85,7 @@ func (v *IAsyncOperationWithProgress) GetCompleted() (*AsyncOperationWithProgres
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -100,7 +100,7 @@ func (v *IAsyncOperationWithProgress) GetResults() (unsafe.Pointer, error) {
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

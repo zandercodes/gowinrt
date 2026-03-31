@@ -1,16 +1,4 @@
-/**
- * File: typedef.go
- * Project: winmd
- * Created Date: 2026‑03‑28T23:26:53.5353+01:00
- * Author: ZanderCodes (Julian Zander) <admin@zandercodes.com>
- *
- * Last Modified: 2026‑03‑29T00:17:01.011+01:00
- * Modified By: ZanderCodes (Julian Zander) <admin@zandercodes.com>
- *
- * Copyright © 2026 ZanderCodes (Julian Zander). All rights reserved.
- */
-
-package winmd
+package metadata
 
 import (
 	"fmt"
@@ -37,8 +25,8 @@ type QualifiedID struct {
 	Name      string
 }
 
-// resolveTypeDefOrRefName resolves a TypeDefOrRef coded index to its namespace and name.
-func resolveTypeDefOrRefName(m *winmd.Metadata, ci winmd.CodedIndex[winmd.TypeDefOrRef]) (string, string, error) {
+// ResolveTypeDefOrRefName resolves a TypeDefOrRef coded index to its namespace and name.
+func ResolveTypeDefOrRefName(m *winmd.Metadata, ci winmd.CodedIndex[winmd.TypeDefOrRef]) (string, string, error) {
 	switch {
 	case ci.Tag == winmd.TypeDefOrRef_TypeDef:
 		td, err := m.Tables.TypeDef.At(ci.Index)
@@ -59,8 +47,6 @@ func resolveTypeDefOrRefName(m *winmd.Metadata, ci winmd.CodedIndex[winmd.TypeDe
 
 // GetValueForEnumField returns the value of the requested enum field.
 func (typeDef *TypeDef) GetValueForEnumField(fieldIndex uint32) (string, error) {
-	// For each Enum value definition, there is a corresponding row in the Constant table
-	// to store the integer value for the enum value.
 	for i := range typeDef.Ctx().Tables.Constant.Indices() {
 		constant, err := typeDef.Ctx().Tables.Constant.At(i)
 		if err != nil {
@@ -71,12 +57,10 @@ func (typeDef *TypeDef) GetValueForEnumField(fieldIndex uint32) (string, error) 
 			continue
 		}
 
-		// does the blob belong to the field we're looking for?
 		if constant.Parent.Index != winmd.Index(fieldIndex) {
 			continue
 		}
 
-		// The value is a blob that we need to read as little endian
 		var blobIndex uint32
 		for j, b := range constant.Value {
 			blobIndex += uint32(b) << (j * 8)
@@ -113,7 +97,6 @@ func (typeDef *TypeDef) GetTypeDefAttributesWithType(lookupAttrTypeClass string)
 			continue
 		}
 
-		// Parent: The owner of the Attribute must be the given typeDef
 		if cAttr.Parent.Tag != winmd.HasCustomAttribute_TypeDef {
 			continue
 		}
@@ -121,9 +104,6 @@ func (typeDef *TypeDef) GetTypeDefAttributesWithType(lookupAttrTypeClass string)
 			continue
 		}
 
-		// Type: the attribute type must be the given type
-		// the cAttr.Type can be either a MemberRef or a MethodDef.
-		// Since we are looking for a type, we will only consider the MemberRef.
 		if cAttr.Type.Tag != winmd.CustomAttributeType_MemberRef {
 			continue
 		}
@@ -133,8 +113,6 @@ func (typeDef *TypeDef) GetTypeDefAttributesWithType(lookupAttrTypeClass string)
 			continue
 		}
 
-		// we need to check the MemberRef Class
-		// the value can belong to several tables, but we are only going to check for TypeRef
 		if attrTypeMemberRef.Class.Tag != winmd.MemberRefParent_TypeRef {
 			continue
 		}
@@ -167,11 +145,10 @@ func (typeDef *TypeDef) GetImplementedInterfaces() ([]QualifiedID, error) {
 		}
 
 		if interfaceImpl.Interface.Tag == winmd.TypeDefOrRef_TypeSpec {
-			// ignore type spec rows
 			continue
 		}
 
-		ifaceNS, ifaceName, err := resolveTypeDefOrRefName(typeDef.Ctx(), interfaceImpl.Interface)
+		ifaceNS, ifaceName, err := ResolveTypeDefOrRefName(typeDef.Ctx(), interfaceImpl.Interface)
 		if err != nil {
 			return nil, err
 		}
@@ -184,39 +161,11 @@ func (typeDef *TypeDef) GetImplementedInterfaces() ([]QualifiedID, error) {
 
 // Extends returns true if the type extends the given class.
 func (typeDef *TypeDef) Extends(class string) (bool, error) {
-	ns, name, err := resolveTypeDefOrRefName(typeDef.Ctx(), typeDef.TypeDef.Extends)
+	ns, name, err := ResolveTypeDefOrRefName(typeDef.Ctx(), typeDef.TypeDef.Extends)
 	if err != nil {
 		return false, err
 	}
 	return ns+"."+name == class, nil
-}
-
-// GetGenericParams returns the generic parameters of the type.
-func (typeDef *TypeDef) GetGenericParams() ([]*winmd.GenericParam, error) {
-	params := make([]*winmd.GenericParam, 0)
-
-	for i := range typeDef.Ctx().Tables.GenericParam.Indices() {
-		gp, err := typeDef.Ctx().Tables.GenericParam.At(i)
-		if err != nil {
-			continue
-		}
-
-		if gp.Owner.Tag != winmd.TypeOrMethodDef_TypeDef {
-			continue
-		}
-		if gp.Owner.Index != typeDef.index {
-			continue
-		}
-
-		params = append(params, &gp)
-	}
-
-	if len(params) == 0 {
-		return nil, fmt.Errorf("could not find generic params for type %s.%s",
-			typeDef.Namespace.String(), typeDef.Name.String())
-	}
-
-	return params, nil
 }
 
 // IsInterface returns true if the type is an interface.
@@ -262,7 +211,6 @@ func (typeDef *TypeDef) IsStruct() bool {
 
 // IsRuntimeClass returns true if the type is a runtime class.
 func (typeDef *TypeDef) IsRuntimeClass() bool {
-	// Flags: all runtime classes must carry the public, auto layout, class, and tdWindowsRuntime flags.
 	isPublic := typeDef.Flags&winmd.TypeAttributes_VisibilityMask == winmd.TypeAttributes_Public
 	isAutoLayout := typeDef.Flags&winmd.TypeAttributes_LayoutMask == winmd.TypeAttributes_AutoLayout
 	isClass := typeDef.Flags&winmd.TypeAttributes_ClassSemanticsMask == winmd.TypeAttributes_Class
@@ -281,29 +229,23 @@ func (typeDef *TypeDef) GUID() (string, error) {
 
 // guidBlobToString converts an array into the textual representation of a GUID.
 func guidBlobToString(b []byte) (string, error) {
-	// the guid is a blob of 20 bytes
 	if len(b) != 20 {
 		return "", fmt.Errorf("invalid GUID blob length: %d", len(b))
 	}
 
-	// that starts with 0100
 	if b[0] != 0x01 || b[1] != 0x00 {
 		return "", fmt.Errorf("invalid GUID blob header, expected '0x01 0x00' but found '0x%02x 0x%02x'", b[0], b[1])
 	}
 
-	// and ends with 0000
 	if b[18] != 0x00 || b[19] != 0x00 {
 		return "", fmt.Errorf("invalid GUID blob footer, expected '0x00 0x00' but found '0x%02x 0x%02x'", b[18], b[19])
 	}
 
 	guid := b[2 : len(b)-2]
-	// the string version has 5 parts separated by '-'
 	return fmt.Sprintf("%08x-%04x-%04x-%04x-%04x%08x",
-		// The first 3 are encoded as little endian
 		uint32(guid[0])|uint32(guid[1])<<8|uint32(guid[2])<<16|uint32(guid[3])<<24,
 		uint16(guid[4])|uint16(guid[5])<<8,
 		uint16(guid[6])|uint16(guid[7])<<8,
-		// the rest is not
 		uint16(guid[8])<<8|uint16(guid[9]),
 		uint16(guid[10])<<8|uint16(guid[11]),
 		uint32(guid[12])<<24|uint32(guid[13])<<16|uint32(guid[14])<<8|uint32(guid[15])), nil

@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDIDataWriter string = "64b89265-d341-4922-b38a-dd4af8808c4e"
 const SignatureIDataWriter string = "{64b89265-d341-4922-b38a-dd4af8808c4e}"
 
 type IDataWriter struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type IDataWriterVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetUnstoredBufferLength uintptr
 	GetUnicodeEncoding      uintptr
@@ -64,7 +64,7 @@ func (v *IDataWriter) WriteBytes(valueSize uint32, value []uint8) error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -79,7 +79,7 @@ func (v *IDataWriter) DetachBuffer() (*IBuffer, error) {
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

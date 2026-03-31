@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDIRandomAccessStream string = "905a0fe1-bc53-11df-8c49-001e4fc686da"
 const SignatureIRandomAccessStream string = "{905a0fe1-bc53-11df-8c49-001e4fc686da}"
 
 type IRandomAccessStream struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type IRandomAccessStreamVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetSize           uintptr
 	SetSize           uintptr
@@ -46,7 +46,7 @@ func (v *IRandomAccessStream) GetSize() (uint64, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil

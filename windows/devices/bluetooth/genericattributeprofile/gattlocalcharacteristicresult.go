@@ -9,25 +9,25 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/devices/bluetooth"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattLocalCharacteristicResult string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattLocalCharacteristicResult;{7975de9b-0170-4397-9666-92f863f12ee6})"
 
 type GattLocalCharacteristicResult struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattLocalCharacteristicResult) GetCharacteristic() (*GattLocalCharacteristic, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristicResult))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristicResult))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristicResult)(unsafe.Pointer(itf))
 	return v.GetCharacteristic()
 }
 
 func (impl *GattLocalCharacteristicResult) GetError() (bluetooth.BluetoothError, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristicResult))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristicResult))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristicResult)(unsafe.Pointer(itf))
 	return v.GetError()
@@ -37,11 +37,11 @@ const GUIDiGattLocalCharacteristicResult string = "7975de9b-0170-4397-9666-92f86
 const SignatureiGattLocalCharacteristicResult string = "{7975de9b-0170-4397-9666-92f863f12ee6}"
 
 type iGattLocalCharacteristicResult struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattLocalCharacteristicResultVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetCharacteristic uintptr
 	GetError          uintptr
@@ -60,7 +60,7 @@ func (v *iGattLocalCharacteristicResult) GetCharacteristic() (*GattLocalCharacte
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -75,7 +75,7 @@ func (v *iGattLocalCharacteristicResult) GetError() (bluetooth.BluetoothError, e
 	)
 
 	if hr != 0 {
-		return bluetooth.BluetoothErrorSuccess, ole.NewError(hr)
+		return bluetooth.BluetoothErrorSuccess, winrt.NewError(hr)
 	}
 
 	return out, nil

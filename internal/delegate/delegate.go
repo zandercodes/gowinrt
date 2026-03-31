@@ -7,7 +7,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 // Syscall callbacks are limited in number per process and never freed.
@@ -20,7 +20,7 @@ var (
 
 // Delegate represents a WinRT delegate that can receive callbacks.
 type Delegate interface {
-	GetIID() *ole.GUID
+	GetIID() *winrt.GUID
 	Invoke(instancePtr, rawArgs0, rawArgs1, rawArgs2, rawArgs3, rawArgs4, rawArgs5, rawArgs6, rawArgs7, rawArgs8 unsafe.Pointer) uintptr
 	AddRef() uintptr
 	Release() uintptr
@@ -68,25 +68,25 @@ func remove(ptr unsafe.Pointer) {
 func queryInterface(instancePtr, iidPtr unsafe.Pointer, ppv *unsafe.Pointer) uintptr {
 	inst, ok := get(instancePtr)
 	if !ok || ppv == nil {
-		return ole.E_POINTER
+		return winrt.E_POINTER
 	}
 
-	iid := (*ole.GUID)(iidPtr)
-	if ole.IsEqualGUID(iid, inst.GetIID()) || ole.IsEqualGUID(iid, ole.IID_IUnknown) || ole.IsEqualGUID(iid, ole.IID_IInspectable) {
+	iid := (*winrt.GUID)(iidPtr)
+	if winrt.IsEqualGUID(iid, inst.GetIID()) || winrt.IsEqualGUID(iid, winrt.IID_IUnknown) || winrt.IsEqualGUID(iid, winrt.IID_IInspectable) {
 		*ppv = instancePtr
 	} else {
 		*ppv = nil
-		return ole.E_NOINTERFACE
+		return winrt.E_NOINTERFACE
 	}
 
-	(*ole.IUnknown)(*ppv).AddRef()
-	return ole.S_OK
+	(*winrt.IUnknown)(*ppv).AddRef()
+	return winrt.S_OK
 }
 
 func invoke(instancePtr, a0, a1, a2, a3, a4, a5, a6, a7, a8 unsafe.Pointer) uintptr {
 	inst, ok := get(instancePtr)
 	if !ok {
-		return ole.E_FAIL
+		return winrt.E_FAIL
 	}
 	return inst.Invoke(instancePtr, a0, a1, a2, a3, a4, a5, a6, a7, a8)
 }
@@ -94,7 +94,7 @@ func invoke(instancePtr, a0, a1, a2, a3, a4, a5, a6, a7, a8 unsafe.Pointer) uint
 func addRef(instancePtr unsafe.Pointer) uintptr {
 	inst, ok := get(instancePtr)
 	if !ok {
-		return ole.E_FAIL
+		return winrt.E_FAIL
 	}
 	return inst.AddRef()
 }
@@ -102,7 +102,7 @@ func addRef(instancePtr unsafe.Pointer) uintptr {
 func release(instancePtr unsafe.Pointer) uintptr {
 	inst, ok := get(instancePtr)
 	if !ok {
-		return ole.E_FAIL
+		return winrt.E_FAIL
 	}
 	rem := inst.Release()
 	if rem == 0 {

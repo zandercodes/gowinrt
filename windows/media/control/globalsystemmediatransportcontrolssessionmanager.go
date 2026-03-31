@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGlobalSystemMediaTransportControlsSessionManager string = "rc(Windows.Media.Control.GlobalSystemMediaTransportControlsSessionManager;{cace8eac-e86e-504a-ab31-5ff8ff1bce49})"
 
 type GlobalSystemMediaTransportControlsSessionManager struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GlobalSystemMediaTransportControlsSessionManager) GetCurrentSession() (*GlobalSystemMediaTransportControlsSession, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionManager))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionManager))
 	defer itf.Release()
 	v := (*iGlobalSystemMediaTransportControlsSessionManager)(unsafe.Pointer(itf))
 	return v.GetCurrentSession()
@@ -30,11 +30,11 @@ const GUIDiGlobalSystemMediaTransportControlsSessionManager string = "cace8eac-e
 const SignatureiGlobalSystemMediaTransportControlsSessionManager string = "{cace8eac-e86e-504a-ab31-5ff8ff1bce49}"
 
 type iGlobalSystemMediaTransportControlsSessionManager struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGlobalSystemMediaTransportControlsSessionManagerVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetCurrentSession           uintptr
 	GetSessions                 uintptr
@@ -57,7 +57,7 @@ func (v *iGlobalSystemMediaTransportControlsSessionManager) GetCurrentSession() 
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -67,11 +67,11 @@ const GUIDiGlobalSystemMediaTransportControlsSessionManagerStatics string = "205
 const SignatureiGlobalSystemMediaTransportControlsSessionManagerStatics string = "{2050c4ee-11a0-57de-aed7-c97c70338245}"
 
 type iGlobalSystemMediaTransportControlsSessionManagerStatics struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGlobalSystemMediaTransportControlsSessionManagerStaticsVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GlobalSystemMediaTransportControlsSessionManagerRequestAsync uintptr
 }
@@ -81,7 +81,7 @@ func (v *iGlobalSystemMediaTransportControlsSessionManagerStatics) VTable() *iGl
 }
 
 func GlobalSystemMediaTransportControlsSessionManagerRequestAsync() (*foundation.IAsyncOperation, error) {
-	inspectable, err := ole.RoGetActivationFactory("Windows.Media.Control.GlobalSystemMediaTransportControlsSessionManager", ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionManagerStatics))
+	inspectable, err := winrt.RoGetActivationFactory("Windows.Media.Control.GlobalSystemMediaTransportControlsSessionManager", winrt.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionManagerStatics))
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +95,7 @@ func GlobalSystemMediaTransportControlsSessionManagerRequestAsync() (*foundation
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDIVectorView string = "bbe1fa4c-b0e3-4583-baef-1f1b2e483e56"
 const SignatureIVectorView string = "{bbe1fa4c-b0e3-4583-baef-1f1b2e483e56}"
 
 type IVectorView struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type IVectorViewVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetAt   uintptr
 	GetSize uintptr
@@ -42,7 +42,7 @@ func (v *IVectorView) GetAt(index uint32) (unsafe.Pointer, error) {
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -57,7 +57,7 @@ func (v *IVectorView) GetSize() (uint32, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -75,7 +75,7 @@ func (v *IVectorView) IndexOf(value unsafe.Pointer) (uint32, bool, error) {
 	)
 
 	if hr != 0 {
-		return 0, false, ole.NewError(hr)
+		return 0, false, winrt.NewError(hr)
 	}
 
 	return index, out, nil
@@ -94,7 +94,7 @@ func (v *IVectorView) GetMany(startIndex uint32, itemsSize uint32) ([]unsafe.Poi
 	)
 
 	if hr != 0 {
-		return nil, 0, ole.NewError(hr)
+		return nil, 0, winrt.NewError(hr)
 	}
 
 	return items, out, nil

@@ -2,12 +2,12 @@
 const Signature{{.Name}} string = "{{.Signature}}"
 
 type {{.Name}} struct {
-    ole.IUnknown
+    winrt.IUnknown
 }
 
 {{if .HasEmptyConstructor}}
 func New{{.Name}}() (*{{.Name}}, error) {
-    inspectable, err := ole.RoActivateInstance("{{.FullyQualifiedName}}")
+    inspectable, err := winrt.RoActivateInstance("{{.FullyQualifiedName}}")
     if err != nil {
         return nil, err
     }

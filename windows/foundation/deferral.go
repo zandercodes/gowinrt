@@ -9,24 +9,24 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureDeferral string = "rc(Windows.Foundation.Deferral;{d6269732-3b7f-46a7-b40b-4fdca2a2c693})"
 
 type Deferral struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *Deferral) Complete() error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiDeferral))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiDeferral))
 	defer itf.Release()
 	v := (*iDeferral)(unsafe.Pointer(itf))
 	return v.Complete()
 }
 
 func (impl *Deferral) Close() error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDIClosable))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDIClosable))
 	defer itf.Release()
 	v := (*IClosable)(unsafe.Pointer(itf))
 	return v.Close()
@@ -36,11 +36,11 @@ const GUIDiDeferral string = "d6269732-3b7f-46a7-b40b-4fdca2a2c693"
 const SignatureiDeferral string = "{d6269732-3b7f-46a7-b40b-4fdca2a2c693}"
 
 type iDeferral struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iDeferralVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	Complete uintptr
 }
@@ -56,7 +56,7 @@ func (v *iDeferral) Complete() error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -66,11 +66,11 @@ const GUIDiDeferralFactory string = "65a1ecc5-3fb5-4832-8ca9-f061b281d13a"
 const SignatureiDeferralFactory string = "{65a1ecc5-3fb5-4832-8ca9-f061b281d13a}"
 
 type iDeferralFactory struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iDeferralFactoryVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	DeferralCreate uintptr
 }
@@ -80,7 +80,7 @@ func (v *iDeferralFactory) VTable() *iDeferralFactoryVtbl {
 }
 
 func DeferralCreate(handler *DeferralCompletedHandler) (*Deferral, error) {
-	inspectable, err := ole.RoGetActivationFactory("Windows.Foundation.Deferral", ole.NewGUID(GUIDiDeferralFactory))
+	inspectable, err := winrt.RoGetActivationFactory("Windows.Foundation.Deferral", winrt.NewGUID(GUIDiDeferralFactory))
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +95,7 @@ func DeferralCreate(handler *DeferralCompletedHandler) (*Deferral, error) {
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

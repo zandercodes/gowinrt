@@ -9,25 +9,25 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/storage/streams"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattReadResult string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattReadResult;{63a66f08-1aea-4c4c-a50f-97bae474b348})"
 
 type GattReadResult struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattReadResult) GetStatus() (GattCommunicationStatus, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattReadResult))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattReadResult))
 	defer itf.Release()
 	v := (*iGattReadResult)(unsafe.Pointer(itf))
 	return v.GetStatus()
 }
 
 func (impl *GattReadResult) GetValue() (*streams.IBuffer, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattReadResult))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattReadResult))
 	defer itf.Release()
 	v := (*iGattReadResult)(unsafe.Pointer(itf))
 	return v.GetValue()
@@ -37,11 +37,11 @@ const GUIDiGattReadResult string = "63a66f08-1aea-4c4c-a50f-97bae474b348"
 const SignatureiGattReadResult string = "{63a66f08-1aea-4c4c-a50f-97bae474b348}"
 
 type iGattReadResult struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattReadResultVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetStatus uintptr
 	GetValue  uintptr
@@ -60,7 +60,7 @@ func (v *iGattReadResult) GetStatus() (GattCommunicationStatus, error) {
 	)
 
 	if hr != 0 {
-		return GattCommunicationStatusSuccess, ole.NewError(hr)
+		return GattCommunicationStatusSuccess, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -75,7 +75,7 @@ func (v *iGattReadResult) GetValue() (*streams.IBuffer, error) {
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -85,11 +85,11 @@ const GUIDiGattReadResult2 string = "a10f50a0-fb43-48af-baaa-638a5c6329fe"
 const SignatureiGattReadResult2 string = "{a10f50a0-fb43-48af-baaa-638a5c6329fe}"
 
 type iGattReadResult2 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattReadResult2Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetProtocolError uintptr
 }

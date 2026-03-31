@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDIDataReader string = "e2b50029-b4c1-4314-a4b8-fb813a2f275e"
 const SignatureIDataReader string = "{e2b50029-b4c1-4314-a4b8-fb813a2f275e}"
 
 type IDataReader struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type IDataReaderVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetUnconsumedBufferLength uintptr
 	GetUnicodeEncoding        uintptr
@@ -64,7 +64,7 @@ func (v *IDataReader) ReadBytes(valueSize uint32) ([]uint8, error) {
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return value, nil

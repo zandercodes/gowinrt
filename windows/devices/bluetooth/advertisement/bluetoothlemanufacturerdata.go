@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/storage/streams"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureBluetoothLEManufacturerData string = "rc(Windows.Devices.Bluetooth.Advertisement.BluetoothLEManufacturerData;{912dba18-6963-4533-b061-4694dafb34e5})"
 
 type BluetoothLEManufacturerData struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func NewBluetoothLEManufacturerData() (*BluetoothLEManufacturerData, error) {
-	inspectable, err := ole.RoActivateInstance("Windows.Devices.Bluetooth.Advertisement.BluetoothLEManufacturerData")
+	inspectable, err := winrt.RoActivateInstance("Windows.Devices.Bluetooth.Advertisement.BluetoothLEManufacturerData")
 	if err != nil {
 		return nil, err
 	}
@@ -28,28 +28,28 @@ func NewBluetoothLEManufacturerData() (*BluetoothLEManufacturerData, error) {
 }
 
 func (impl *BluetoothLEManufacturerData) GetCompanyId() (uint16, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEManufacturerData))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEManufacturerData))
 	defer itf.Release()
 	v := (*iBluetoothLEManufacturerData)(unsafe.Pointer(itf))
 	return v.GetCompanyId()
 }
 
 func (impl *BluetoothLEManufacturerData) SetCompanyId(value uint16) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEManufacturerData))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEManufacturerData))
 	defer itf.Release()
 	v := (*iBluetoothLEManufacturerData)(unsafe.Pointer(itf))
 	return v.SetCompanyId(value)
 }
 
 func (impl *BluetoothLEManufacturerData) GetData() (*streams.IBuffer, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEManufacturerData))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEManufacturerData))
 	defer itf.Release()
 	v := (*iBluetoothLEManufacturerData)(unsafe.Pointer(itf))
 	return v.GetData()
 }
 
 func (impl *BluetoothLEManufacturerData) SetData(value *streams.IBuffer) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEManufacturerData))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEManufacturerData))
 	defer itf.Release()
 	v := (*iBluetoothLEManufacturerData)(unsafe.Pointer(itf))
 	return v.SetData(value)
@@ -59,11 +59,11 @@ const GUIDiBluetoothLEManufacturerData string = "912dba18-6963-4533-b061-4694daf
 const SignatureiBluetoothLEManufacturerData string = "{912dba18-6963-4533-b061-4694dafb34e5}"
 
 type iBluetoothLEManufacturerData struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEManufacturerDataVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetCompanyId uintptr
 	SetCompanyId uintptr
@@ -84,7 +84,7 @@ func (v *iBluetoothLEManufacturerData) GetCompanyId() (uint16, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -98,7 +98,7 @@ func (v *iBluetoothLEManufacturerData) SetCompanyId(value uint16) error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -113,7 +113,7 @@ func (v *iBluetoothLEManufacturerData) GetData() (*streams.IBuffer, error) {
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -127,7 +127,7 @@ func (v *iBluetoothLEManufacturerData) SetData(value *streams.IBuffer) error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -137,11 +137,11 @@ const GUIDiBluetoothLEManufacturerDataFactory string = "c09b39f8-319a-441e-8de5-
 const SignatureiBluetoothLEManufacturerDataFactory string = "{c09b39f8-319a-441e-8de5-66a81e877a6c}"
 
 type iBluetoothLEManufacturerDataFactory struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEManufacturerDataFactoryVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	BluetoothLEManufacturerDataCreate uintptr
 }
@@ -151,7 +151,7 @@ func (v *iBluetoothLEManufacturerDataFactory) VTable() *iBluetoothLEManufacturer
 }
 
 func BluetoothLEManufacturerDataCreate(companyId uint16, data *streams.IBuffer) (*BluetoothLEManufacturerData, error) {
-	inspectable, err := ole.RoGetActivationFactory("Windows.Devices.Bluetooth.Advertisement.BluetoothLEManufacturerData", ole.NewGUID(GUIDiBluetoothLEManufacturerDataFactory))
+	inspectable, err := winrt.RoGetActivationFactory("Windows.Devices.Bluetooth.Advertisement.BluetoothLEManufacturerData", winrt.NewGUID(GUIDiBluetoothLEManufacturerDataFactory))
 	if err != nil {
 		return nil, err
 	}
@@ -167,7 +167,7 @@ func BluetoothLEManufacturerDataCreate(companyId uint16, data *streams.IBuffer) 
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDIPropertyValue string = "4bd682dd-7554-40e9-9a9b-82654ede7e62"
 const SignatureIPropertyValue string = "{4bd682dd-7554-40e9-9a9b-82654ede7e62}"
 
 type IPropertyValue struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type IPropertyValueVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetType             uintptr
 	GetIsNumericScalar  uintptr
@@ -76,7 +76,7 @@ func (v *IPropertyValue) GetType() (PropertyType, error) {
 	)
 
 	if hr != 0 {
-		return PropertyTypeEmpty, ole.NewError(hr)
+		return PropertyTypeEmpty, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -91,7 +91,7 @@ func (v *IPropertyValue) GetIsNumericScalar() (bool, error) {
 	)
 
 	if hr != 0 {
-		return false, ole.NewError(hr)
+		return false, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -106,7 +106,7 @@ func (v *IPropertyValue) GetUInt8() (uint8, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -121,7 +121,7 @@ func (v *IPropertyValue) GetInt16() (int16, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -136,7 +136,7 @@ func (v *IPropertyValue) GetUInt16() (uint16, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -151,7 +151,7 @@ func (v *IPropertyValue) GetInt32() (int32, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -166,7 +166,7 @@ func (v *IPropertyValue) GetUInt32() (uint32, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -181,7 +181,7 @@ func (v *IPropertyValue) GetInt64() (int64, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -196,7 +196,7 @@ func (v *IPropertyValue) GetUInt64() (uint64, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -211,7 +211,7 @@ func (v *IPropertyValue) GetSingle() (float32, error) {
 	)
 
 	if hr != 0 {
-		return 0.0, ole.NewError(hr)
+		return 0.0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -226,7 +226,7 @@ func (v *IPropertyValue) GetDouble() (float64, error) {
 	)
 
 	if hr != 0 {
-		return 0.0, ole.NewError(hr)
+		return 0.0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -241,7 +241,7 @@ func (v *IPropertyValue) GetChar16() (byte, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -256,14 +256,14 @@ func (v *IPropertyValue) GetBoolean() (bool, error) {
 	)
 
 	if hr != 0 {
-		return false, ole.NewError(hr)
+		return false, winrt.NewError(hr)
 	}
 
 	return out, nil
 }
 
 func (v *IPropertyValue) GetString() (string, error) {
-	var outHStr ole.HString
+	var outHStr winrt.HString
 	hr, _, _ := syscall.SyscallN(
 		v.VTable().GetString,
 		uintptr(unsafe.Pointer(v)),        // this
@@ -271,11 +271,11 @@ func (v *IPropertyValue) GetString() (string, error) {
 	)
 
 	if hr != 0 {
-		return "", ole.NewError(hr)
+		return "", winrt.NewError(hr)
 	}
 
 	out := outHStr.String()
-	ole.DeleteHString(outHStr)
+	winrt.DeleteHString(outHStr)
 	return out, nil
 }
 
@@ -288,7 +288,7 @@ func (v *IPropertyValue) GetGuid() (syscall.GUID, error) {
 	)
 
 	if hr != 0 {
-		return syscall.GUID{}, ole.NewError(hr)
+		return syscall.GUID{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -303,7 +303,7 @@ func (v *IPropertyValue) GetDateTime() (DateTime, error) {
 	)
 
 	if hr != 0 {
-		return DateTime{}, ole.NewError(hr)
+		return DateTime{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -318,7 +318,7 @@ func (v *IPropertyValue) GetTimeSpan() (TimeSpan, error) {
 	)
 
 	if hr != 0 {
-		return TimeSpan{}, ole.NewError(hr)
+		return TimeSpan{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -333,7 +333,7 @@ func (v *IPropertyValue) GetPoint() (Point, error) {
 	)
 
 	if hr != 0 {
-		return Point{}, ole.NewError(hr)
+		return Point{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -348,7 +348,7 @@ func (v *IPropertyValue) GetSize() (Size, error) {
 	)
 
 	if hr != 0 {
-		return Size{}, ole.NewError(hr)
+		return Size{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -363,7 +363,7 @@ func (v *IPropertyValue) GetRect() (Rect, error) {
 	)
 
 	if hr != 0 {
-		return Rect{}, ole.NewError(hr)
+		return Rect{}, winrt.NewError(hr)
 	}
 
 	return out, nil

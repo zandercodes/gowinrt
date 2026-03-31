@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDIClosable string = "30d5a829-7fa4-4026-83bb-d75bae4ea99e"
 const SignatureIClosable string = "{30d5a829-7fa4-4026-83bb-d75bae4ea99e}"
 
 type IClosable struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type IClosableVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	Close uintptr
 }
@@ -36,7 +36,7 @@ func (v *IClosable) Close() error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil

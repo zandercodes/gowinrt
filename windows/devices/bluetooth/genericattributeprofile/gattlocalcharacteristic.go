@@ -9,139 +9,139 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation"
 	"github.com/zandercodes/gowinrt/windows/foundation/collections"
 	"github.com/zandercodes/gowinrt/windows/storage/streams"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattLocalCharacteristic string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattLocalCharacteristic;{aede376d-5412-4d74-92a8-8deb8526829c})"
 
 type GattLocalCharacteristic struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattLocalCharacteristic) GetUuid() (syscall.GUID, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.GetUuid()
 }
 
 func (impl *GattLocalCharacteristic) GetStaticValue() (*streams.IBuffer, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.GetStaticValue()
 }
 
 func (impl *GattLocalCharacteristic) GetCharacteristicProperties() (GattCharacteristicProperties, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.GetCharacteristicProperties()
 }
 
 func (impl *GattLocalCharacteristic) GetReadProtectionLevel() (GattProtectionLevel, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.GetReadProtectionLevel()
 }
 
 func (impl *GattLocalCharacteristic) GetWriteProtectionLevel() (GattProtectionLevel, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.GetWriteProtectionLevel()
 }
 
 func (impl *GattLocalCharacteristic) CreateDescriptorAsync(descriptorUuid syscall.GUID, parameters *GattLocalDescriptorParameters) (*foundation.IAsyncOperation, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.CreateDescriptorAsync(descriptorUuid, parameters)
 }
 
 func (impl *GattLocalCharacteristic) GetDescriptors() (*collections.IVectorView, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.GetDescriptors()
 }
 
 func (impl *GattLocalCharacteristic) GetUserDescription() (string, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.GetUserDescription()
 }
 
 func (impl *GattLocalCharacteristic) GetPresentationFormats() (*collections.IVectorView, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.GetPresentationFormats()
 }
 
 func (impl *GattLocalCharacteristic) GetSubscribedClients() (*collections.IVectorView, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.GetSubscribedClients()
 }
 
 func (impl *GattLocalCharacteristic) AddSubscribedClientsChanged(handler *foundation.TypedEventHandler) (foundation.EventRegistrationToken, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.AddSubscribedClientsChanged(handler)
 }
 
 func (impl *GattLocalCharacteristic) RemoveSubscribedClientsChanged(token foundation.EventRegistrationToken) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.RemoveSubscribedClientsChanged(token)
 }
 
 func (impl *GattLocalCharacteristic) AddReadRequested(handler *foundation.TypedEventHandler) (foundation.EventRegistrationToken, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.AddReadRequested(handler)
 }
 
 func (impl *GattLocalCharacteristic) RemoveReadRequested(token foundation.EventRegistrationToken) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.RemoveReadRequested(token)
 }
 
 func (impl *GattLocalCharacteristic) AddWriteRequested(handler *foundation.TypedEventHandler) (foundation.EventRegistrationToken, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.AddWriteRequested(handler)
 }
 
 func (impl *GattLocalCharacteristic) RemoveWriteRequested(token foundation.EventRegistrationToken) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.RemoveWriteRequested(token)
 }
 
 func (impl *GattLocalCharacteristic) NotifyValueAsync(value *streams.IBuffer) (*foundation.IAsyncOperation, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.NotifyValueAsync(value)
 }
 
 func (impl *GattLocalCharacteristic) NotifyValueForSubscribedClientAsync(value *streams.IBuffer, subscribedClient *GattSubscribedClient) (*foundation.IAsyncOperation, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristic))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristic)(unsafe.Pointer(itf))
 	return v.NotifyValueForSubscribedClientAsync(value, subscribedClient)
@@ -151,11 +151,11 @@ const GUIDiGattLocalCharacteristic string = "aede376d-5412-4d74-92a8-8deb8526829
 const SignatureiGattLocalCharacteristic string = "{aede376d-5412-4d74-92a8-8deb8526829c}"
 
 type iGattLocalCharacteristic struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattLocalCharacteristicVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetUuid                             uintptr
 	GetStaticValue                      uintptr
@@ -190,7 +190,7 @@ func (v *iGattLocalCharacteristic) GetUuid() (syscall.GUID, error) {
 	)
 
 	if hr != 0 {
-		return syscall.GUID{}, ole.NewError(hr)
+		return syscall.GUID{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -205,7 +205,7 @@ func (v *iGattLocalCharacteristic) GetStaticValue() (*streams.IBuffer, error) {
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -220,7 +220,7 @@ func (v *iGattLocalCharacteristic) GetCharacteristicProperties() (GattCharacteri
 	)
 
 	if hr != 0 {
-		return GattCharacteristicPropertiesNone, ole.NewError(hr)
+		return GattCharacteristicPropertiesNone, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -235,7 +235,7 @@ func (v *iGattLocalCharacteristic) GetReadProtectionLevel() (GattProtectionLevel
 	)
 
 	if hr != 0 {
-		return GattProtectionLevelPlain, ole.NewError(hr)
+		return GattProtectionLevelPlain, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -250,7 +250,7 @@ func (v *iGattLocalCharacteristic) GetWriteProtectionLevel() (GattProtectionLeve
 	)
 
 	if hr != 0 {
-		return GattProtectionLevelPlain, ole.NewError(hr)
+		return GattProtectionLevelPlain, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -267,7 +267,7 @@ func (v *iGattLocalCharacteristic) CreateDescriptorAsync(descriptorUuid syscall.
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -282,14 +282,14 @@ func (v *iGattLocalCharacteristic) GetDescriptors() (*collections.IVectorView, e
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
 }
 
 func (v *iGattLocalCharacteristic) GetUserDescription() (string, error) {
-	var outHStr ole.HString
+	var outHStr winrt.HString
 	hr, _, _ := syscall.SyscallN(
 		v.VTable().GetUserDescription,
 		uintptr(unsafe.Pointer(v)),        // this
@@ -297,11 +297,11 @@ func (v *iGattLocalCharacteristic) GetUserDescription() (string, error) {
 	)
 
 	if hr != 0 {
-		return "", ole.NewError(hr)
+		return "", winrt.NewError(hr)
 	}
 
 	out := outHStr.String()
-	ole.DeleteHString(outHStr)
+	winrt.DeleteHString(outHStr)
 	return out, nil
 }
 
@@ -314,7 +314,7 @@ func (v *iGattLocalCharacteristic) GetPresentationFormats() (*collections.IVecto
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -329,7 +329,7 @@ func (v *iGattLocalCharacteristic) GetSubscribedClients() (*collections.IVectorV
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -345,7 +345,7 @@ func (v *iGattLocalCharacteristic) AddSubscribedClientsChanged(handler *foundati
 	)
 
 	if hr != 0 {
-		return foundation.EventRegistrationToken{}, ole.NewError(hr)
+		return foundation.EventRegistrationToken{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -359,7 +359,7 @@ func (v *iGattLocalCharacteristic) RemoveSubscribedClientsChanged(token foundati
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -375,7 +375,7 @@ func (v *iGattLocalCharacteristic) AddReadRequested(handler *foundation.TypedEve
 	)
 
 	if hr != 0 {
-		return foundation.EventRegistrationToken{}, ole.NewError(hr)
+		return foundation.EventRegistrationToken{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -389,7 +389,7 @@ func (v *iGattLocalCharacteristic) RemoveReadRequested(token foundation.EventReg
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -405,7 +405,7 @@ func (v *iGattLocalCharacteristic) AddWriteRequested(handler *foundation.TypedEv
 	)
 
 	if hr != 0 {
-		return foundation.EventRegistrationToken{}, ole.NewError(hr)
+		return foundation.EventRegistrationToken{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -419,7 +419,7 @@ func (v *iGattLocalCharacteristic) RemoveWriteRequested(token foundation.EventRe
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -435,7 +435,7 @@ func (v *iGattLocalCharacteristic) NotifyValueAsync(value *streams.IBuffer) (*fo
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -452,7 +452,7 @@ func (v *iGattLocalCharacteristic) NotifyValueForSubscribedClientAsync(value *st
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

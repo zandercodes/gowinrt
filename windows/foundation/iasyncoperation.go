@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDIAsyncOperation string = "9fc2b0bb-e446-44e2-aa61-9cab8f636af2"
 const SignatureIAsyncOperation string = "{9fc2b0bb-e446-44e2-aa61-9cab8f636af2}"
 
 type IAsyncOperation struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type IAsyncOperationVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	SetCompleted uintptr
 	GetCompleted uintptr
@@ -39,7 +39,7 @@ func (v *IAsyncOperation) SetCompleted(handler *AsyncOperationCompletedHandler) 
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -54,7 +54,7 @@ func (v *IAsyncOperation) GetCompleted() (*AsyncOperationCompletedHandler, error
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -69,7 +69,7 @@ func (v *IAsyncOperation) GetResults() (unsafe.Pointer, error) {
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

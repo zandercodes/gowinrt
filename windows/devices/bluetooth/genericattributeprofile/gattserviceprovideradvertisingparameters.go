@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/storage/streams"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattServiceProviderAdvertisingParameters string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattServiceProviderAdvertisingParameters;{e2ce31ab-6315-4c22-9bd7-781dbc3d8d82})"
 
 type GattServiceProviderAdvertisingParameters struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func NewGattServiceProviderAdvertisingParameters() (*GattServiceProviderAdvertisingParameters, error) {
-	inspectable, err := ole.RoActivateInstance("Windows.Devices.Bluetooth.GenericAttributeProfile.GattServiceProviderAdvertisingParameters")
+	inspectable, err := winrt.RoActivateInstance("Windows.Devices.Bluetooth.GenericAttributeProfile.GattServiceProviderAdvertisingParameters")
 	if err != nil {
 		return nil, err
 	}
@@ -28,70 +28,70 @@ func NewGattServiceProviderAdvertisingParameters() (*GattServiceProviderAdvertis
 }
 
 func (impl *GattServiceProviderAdvertisingParameters) SetIsConnectable(value bool) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProviderAdvertisingParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProviderAdvertisingParameters))
 	defer itf.Release()
 	v := (*iGattServiceProviderAdvertisingParameters)(unsafe.Pointer(itf))
 	return v.SetIsConnectable(value)
 }
 
 func (impl *GattServiceProviderAdvertisingParameters) GetIsConnectable() (bool, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProviderAdvertisingParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProviderAdvertisingParameters))
 	defer itf.Release()
 	v := (*iGattServiceProviderAdvertisingParameters)(unsafe.Pointer(itf))
 	return v.GetIsConnectable()
 }
 
 func (impl *GattServiceProviderAdvertisingParameters) SetIsDiscoverable(value bool) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProviderAdvertisingParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProviderAdvertisingParameters))
 	defer itf.Release()
 	v := (*iGattServiceProviderAdvertisingParameters)(unsafe.Pointer(itf))
 	return v.SetIsDiscoverable(value)
 }
 
 func (impl *GattServiceProviderAdvertisingParameters) GetIsDiscoverable() (bool, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProviderAdvertisingParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProviderAdvertisingParameters))
 	defer itf.Release()
 	v := (*iGattServiceProviderAdvertisingParameters)(unsafe.Pointer(itf))
 	return v.GetIsDiscoverable()
 }
 
 func (impl *GattServiceProviderAdvertisingParameters) SetServiceData(value *streams.IBuffer) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProviderAdvertisingParameters2))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProviderAdvertisingParameters2))
 	defer itf.Release()
 	v := (*iGattServiceProviderAdvertisingParameters2)(unsafe.Pointer(itf))
 	return v.SetServiceData(value)
 }
 
 func (impl *GattServiceProviderAdvertisingParameters) GetServiceData() (*streams.IBuffer, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProviderAdvertisingParameters2))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProviderAdvertisingParameters2))
 	defer itf.Release()
 	v := (*iGattServiceProviderAdvertisingParameters2)(unsafe.Pointer(itf))
 	return v.GetServiceData()
 }
 
 func (impl *GattServiceProviderAdvertisingParameters) GetUseLowEnergyUncoded1MPhyAsSecondaryPhy() (bool, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProviderAdvertisingParameters3))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProviderAdvertisingParameters3))
 	defer itf.Release()
 	v := (*iGattServiceProviderAdvertisingParameters3)(unsafe.Pointer(itf))
 	return v.GetUseLowEnergyUncoded1MPhyAsSecondaryPhy()
 }
 
 func (impl *GattServiceProviderAdvertisingParameters) SetUseLowEnergyUncoded1MPhyAsSecondaryPhy(value bool) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProviderAdvertisingParameters3))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProviderAdvertisingParameters3))
 	defer itf.Release()
 	v := (*iGattServiceProviderAdvertisingParameters3)(unsafe.Pointer(itf))
 	return v.SetUseLowEnergyUncoded1MPhyAsSecondaryPhy(value)
 }
 
 func (impl *GattServiceProviderAdvertisingParameters) GetUseLowEnergyUncoded2MPhyAsSecondaryPhy() (bool, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProviderAdvertisingParameters3))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProviderAdvertisingParameters3))
 	defer itf.Release()
 	v := (*iGattServiceProviderAdvertisingParameters3)(unsafe.Pointer(itf))
 	return v.GetUseLowEnergyUncoded2MPhyAsSecondaryPhy()
 }
 
 func (impl *GattServiceProviderAdvertisingParameters) SetUseLowEnergyUncoded2MPhyAsSecondaryPhy(value bool) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProviderAdvertisingParameters3))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProviderAdvertisingParameters3))
 	defer itf.Release()
 	v := (*iGattServiceProviderAdvertisingParameters3)(unsafe.Pointer(itf))
 	return v.SetUseLowEnergyUncoded2MPhyAsSecondaryPhy(value)
@@ -101,11 +101,11 @@ const GUIDiGattServiceProviderAdvertisingParameters string = "e2ce31ab-6315-4c22
 const SignatureiGattServiceProviderAdvertisingParameters string = "{e2ce31ab-6315-4c22-9bd7-781dbc3d8d82}"
 
 type iGattServiceProviderAdvertisingParameters struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattServiceProviderAdvertisingParametersVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	SetIsConnectable  uintptr
 	GetIsConnectable  uintptr
@@ -125,7 +125,7 @@ func (v *iGattServiceProviderAdvertisingParameters) SetIsConnectable(value bool)
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -140,7 +140,7 @@ func (v *iGattServiceProviderAdvertisingParameters) GetIsConnectable() (bool, er
 	)
 
 	if hr != 0 {
-		return false, ole.NewError(hr)
+		return false, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -154,7 +154,7 @@ func (v *iGattServiceProviderAdvertisingParameters) SetIsDiscoverable(value bool
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -169,7 +169,7 @@ func (v *iGattServiceProviderAdvertisingParameters) GetIsDiscoverable() (bool, e
 	)
 
 	if hr != 0 {
-		return false, ole.NewError(hr)
+		return false, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -179,11 +179,11 @@ const GUIDiGattServiceProviderAdvertisingParameters2 string = "ff68468d-ca92-443
 const SignatureiGattServiceProviderAdvertisingParameters2 string = "{ff68468d-ca92-4434-9743-0e90988ad879}"
 
 type iGattServiceProviderAdvertisingParameters2 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattServiceProviderAdvertisingParameters2Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	SetServiceData uintptr
 	GetServiceData uintptr
@@ -201,7 +201,7 @@ func (v *iGattServiceProviderAdvertisingParameters2) SetServiceData(value *strea
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -216,7 +216,7 @@ func (v *iGattServiceProviderAdvertisingParameters2) GetServiceData() (*streams.
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -226,11 +226,11 @@ const GUIDiGattServiceProviderAdvertisingParameters3 string = "a23546b2-b216-592
 const SignatureiGattServiceProviderAdvertisingParameters3 string = "{a23546b2-b216-5929-9055-f1313dd53e2a}"
 
 type iGattServiceProviderAdvertisingParameters3 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattServiceProviderAdvertisingParameters3Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetUseLowEnergyUncoded1MPhyAsSecondaryPhy uintptr
 	SetUseLowEnergyUncoded1MPhyAsSecondaryPhy uintptr
@@ -251,7 +251,7 @@ func (v *iGattServiceProviderAdvertisingParameters3) GetUseLowEnergyUncoded1MPhy
 	)
 
 	if hr != 0 {
-		return false, ole.NewError(hr)
+		return false, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -265,7 +265,7 @@ func (v *iGattServiceProviderAdvertisingParameters3) SetUseLowEnergyUncoded1MPhy
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -280,7 +280,7 @@ func (v *iGattServiceProviderAdvertisingParameters3) GetUseLowEnergyUncoded2MPhy
 	)
 
 	if hr != 0 {
-		return false, ole.NewError(hr)
+		return false, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -294,7 +294,7 @@ func (v *iGattServiceProviderAdvertisingParameters3) SetUseLowEnergyUncoded2MPhy
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil

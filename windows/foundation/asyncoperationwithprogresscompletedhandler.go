@@ -10,23 +10,23 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/internal/delegate"
 	"github.com/zandercodes/gowinrt/internal/kernel32"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDAsyncOperationWithProgressCompletedHandler string = "e85df41d-6aa7-46e3-a8e2-f009d840c627"
 const SignatureAsyncOperationWithProgressCompletedHandler string = "delegate({e85df41d-6aa7-46e3-a8e2-f009d840c627})"
 
 type AsyncOperationWithProgressCompletedHandler struct {
-	ole.IUnknown
+	winrt.IUnknown
 	sync.Mutex
 	refs uintptr
-	IID  ole.GUID
+	IID  winrt.GUID
 }
 
 type AsyncOperationWithProgressCompletedHandlerVtbl struct {
-	ole.IUnknownVtbl
+	winrt.IUnknownVtbl
 	Invoke uintptr
 }
 
@@ -42,7 +42,7 @@ var releaseChannelsAsyncOperationWithProgressCompletedHandler = &asyncOperationW
 	chans: make(map[unsafe.Pointer]chan struct{}),
 }
 
-func NewAsyncOperationWithProgressCompletedHandler(iid *ole.GUID, callback AsyncOperationWithProgressCompletedHandlerCallback) *AsyncOperationWithProgressCompletedHandler {
+func NewAsyncOperationWithProgressCompletedHandler(iid *winrt.GUID, callback AsyncOperationWithProgressCompletedHandlerCallback) *AsyncOperationWithProgressCompletedHandler {
 	size := unsafe.Sizeof(*(*AsyncOperationWithProgressCompletedHandler)(nil))
 	instPtr := kernel32.Malloc(size)
 	inst := (*AsyncOperationWithProgressCompletedHandler)(instPtr)
@@ -55,7 +55,7 @@ func NewAsyncOperationWithProgressCompletedHandler(iid *ole.GUID, callback Async
 	inst.RawVTable = (*interface{})(vTablePtr)
 
 	vTable := (*AsyncOperationWithProgressCompletedHandlerVtbl)(vTablePtr)
-	vTable.IUnknownVtbl = ole.IUnknownVtbl{
+	vTable.IUnknownVtbl = winrt.IUnknownVtbl{
 		QueryInterface: callbacks.QueryInterface,
 		AddRef:         callbacks.AddRef,
 		Release:        callbacks.Release,
@@ -73,7 +73,7 @@ func NewAsyncOperationWithProgressCompletedHandler(iid *ole.GUID, callback Async
 	return inst
 }
 
-func (r *AsyncOperationWithProgressCompletedHandler) GetIID() *ole.GUID {
+func (r *AsyncOperationWithProgressCompletedHandler) GetIID() *winrt.GUID {
 	return &r.IID
 }
 
@@ -102,7 +102,7 @@ func (instance *AsyncOperationWithProgressCompletedHandler) Invoke(instancePtr, 
 	if callback, ok := callbacksAsyncOperationWithProgressCompletedHandler.get(instancePtr); ok {
 		callback(instance, asyncInfo, asyncStatus)
 	}
-	return ole.S_OK
+	return winrt.S_OK
 }
 
 func (instance *AsyncOperationWithProgressCompletedHandler) AddRef() uintptr {

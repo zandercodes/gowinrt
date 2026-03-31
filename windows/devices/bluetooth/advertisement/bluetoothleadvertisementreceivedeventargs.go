@@ -9,31 +9,31 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureBluetoothLEAdvertisementReceivedEventArgs string = "rc(Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementReceivedEventArgs;{27987ddf-e596-41be-8d43-9e6731d4a913})"
 
 type BluetoothLEAdvertisementReceivedEventArgs struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *BluetoothLEAdvertisementReceivedEventArgs) GetRawSignalStrengthInDBm() (int16, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementReceivedEventArgs))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementReceivedEventArgs))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementReceivedEventArgs)(unsafe.Pointer(itf))
 	return v.GetRawSignalStrengthInDBm()
 }
 
 func (impl *BluetoothLEAdvertisementReceivedEventArgs) GetBluetoothAddress() (uint64, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementReceivedEventArgs))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementReceivedEventArgs))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementReceivedEventArgs)(unsafe.Pointer(itf))
 	return v.GetBluetoothAddress()
 }
 
 func (impl *BluetoothLEAdvertisementReceivedEventArgs) GetAdvertisement() (*BluetoothLEAdvertisement, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementReceivedEventArgs))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementReceivedEventArgs))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementReceivedEventArgs)(unsafe.Pointer(itf))
 	return v.GetAdvertisement()
@@ -43,11 +43,11 @@ const GUIDiBluetoothLEAdvertisementReceivedEventArgs string = "27987ddf-e596-41b
 const SignatureiBluetoothLEAdvertisementReceivedEventArgs string = "{27987ddf-e596-41be-8d43-9e6731d4a913}"
 
 type iBluetoothLEAdvertisementReceivedEventArgs struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEAdvertisementReceivedEventArgsVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetRawSignalStrengthInDBm uintptr
 	GetBluetoothAddress       uintptr
@@ -69,7 +69,7 @@ func (v *iBluetoothLEAdvertisementReceivedEventArgs) GetRawSignalStrengthInDBm()
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -84,7 +84,7 @@ func (v *iBluetoothLEAdvertisementReceivedEventArgs) GetBluetoothAddress() (uint
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -99,7 +99,7 @@ func (v *iBluetoothLEAdvertisementReceivedEventArgs) GetAdvertisement() (*Blueto
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -109,11 +109,11 @@ const GUIDiBluetoothLEAdvertisementReceivedEventArgs2 string = "12d9c87b-0399-5f
 const SignatureiBluetoothLEAdvertisementReceivedEventArgs2 string = "{12d9c87b-0399-5f0e-a348-53b02b6b162e}"
 
 type iBluetoothLEAdvertisementReceivedEventArgs2 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEAdvertisementReceivedEventArgs2Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetBluetoothAddressType    uintptr
 	GetTransmitPowerLevelInDBm uintptr
@@ -132,11 +132,11 @@ const GUIDiBluetoothLEAdvertisementReceivedEventArgs3 string = "8d204b54-ff86-5d
 const SignatureiBluetoothLEAdvertisementReceivedEventArgs3 string = "{8d204b54-ff86-5d84-a25a-137dccd96f7a}"
 
 type iBluetoothLEAdvertisementReceivedEventArgs3 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEAdvertisementReceivedEventArgs3Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetPrimaryPhy   uintptr
 	GetSecondaryPhy uintptr

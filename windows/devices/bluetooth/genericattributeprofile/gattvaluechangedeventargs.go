@@ -9,26 +9,26 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation"
 	"github.com/zandercodes/gowinrt/windows/storage/streams"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattValueChangedEventArgs string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattValueChangedEventArgs;{d21bdb54-06e3-4ed8-a263-acfac8ba7313})"
 
 type GattValueChangedEventArgs struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattValueChangedEventArgs) GetCharacteristicValue() (*streams.IBuffer, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattValueChangedEventArgs))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattValueChangedEventArgs))
 	defer itf.Release()
 	v := (*iGattValueChangedEventArgs)(unsafe.Pointer(itf))
 	return v.GetCharacteristicValue()
 }
 
 func (impl *GattValueChangedEventArgs) GetTimestamp() (foundation.DateTime, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattValueChangedEventArgs))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattValueChangedEventArgs))
 	defer itf.Release()
 	v := (*iGattValueChangedEventArgs)(unsafe.Pointer(itf))
 	return v.GetTimestamp()
@@ -38,11 +38,11 @@ const GUIDiGattValueChangedEventArgs string = "d21bdb54-06e3-4ed8-a263-acfac8ba7
 const SignatureiGattValueChangedEventArgs string = "{d21bdb54-06e3-4ed8-a263-acfac8ba7313}"
 
 type iGattValueChangedEventArgs struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattValueChangedEventArgsVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetCharacteristicValue uintptr
 	GetTimestamp           uintptr
@@ -61,7 +61,7 @@ func (v *iGattValueChangedEventArgs) GetCharacteristicValue() (*streams.IBuffer,
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -76,7 +76,7 @@ func (v *iGattValueChangedEventArgs) GetTimestamp() (foundation.DateTime, error)
 	)
 
 	if hr != 0 {
-		return foundation.DateTime{}, ole.NewError(hr)
+		return foundation.DateTime{}, winrt.NewError(hr)
 	}
 
 	return out, nil

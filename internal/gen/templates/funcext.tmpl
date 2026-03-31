@@ -20,7 +20,7 @@
     {{- /* method body */ -}}
 
     {
-        itf := impl.MustQueryInterface(ole.NewGUID({{if .InheritedFrom.Namespace}}{{.InheritedFrom.Namespace}}.{{end}}GUID{{.InheritedFrom.Name}}))
+        itf := impl.MustQueryInterface(winrt.NewGUID({{if .InheritedFrom.Namespace}}{{.InheritedFrom.Namespace}}.{{end}}GUID{{.InheritedFrom.Name}}))
         defer itf.Release()
         v := (*{{if .InheritedFrom.Namespace}}{{.InheritedFrom.Namespace}}.{{end}}{{.InheritedFrom.Name}})(unsafe.Pointer(itf))
         return v.{{funcName . -}}(

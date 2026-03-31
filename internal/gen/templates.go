@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"strings"
 	"text/template"
+
+	"github.com/zandercodes/gowinrt/internal/ir"
+	"github.com/zandercodes/gowinrt/internal/resolve"
 )
 
 // ---------- templates ----------
@@ -12,7 +15,8 @@ import (
 //go:embed templates/*
 var templatesFS embed.FS
 
-func loadTemplates() (*template.Template, error) {
+// LoadTemplates loads and parses the Go code generation templates.
+func LoadTemplates() (*template.Template, error) {
 	return template.New("").
 		Funcs(templateFuncs()).
 		ParseFS(templatesFS, "templates/*")
@@ -21,7 +25,7 @@ func loadTemplates() (*template.Template, error) {
 func templateFuncs() template.FuncMap {
 	return template.FuncMap{
 		"funcName": funcName,
-		"concat": func(a, b []*genParam) []*genParam {
+		"concat": func(a, b []*ir.Param) []*ir.Param {
 			return append(a, b...)
 		},
 		"toLower": func(s string) string {
@@ -47,8 +51,8 @@ func templateFuncs() template.FuncMap {
 	}
 }
 
-// funcName generates the Go-style function name from a genFunc.
-func funcName(m genFunc) string {
+// funcName generates the Go-style function name from an ir.Func.
+func funcName(m ir.Func) string {
 	replacer := strings.NewReplacer(
 		"get_", "Get",
 		"put_", "Set",
@@ -60,7 +64,7 @@ func funcName(m genFunc) string {
 	prefix := ""
 	if m.ExclusiveTo != "" && m.RequiresActivation {
 		parts := strings.Split(m.ExclusiveTo, ".")
-		prefix = toGoName(parts[len(parts)-1], true)
+		prefix = resolve.ToGoName(parts[len(parts)-1], true)
 	}
 	return prefix + name
 }

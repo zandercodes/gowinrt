@@ -8,24 +8,24 @@ package control
 import (
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureMediaPropertiesChangedEventArgs string = "rc(Windows.Media.Control.MediaPropertiesChangedEventArgs;{7d3741cb-adf0-5cef-91ba-cfabcdd77678})"
 
 type MediaPropertiesChangedEventArgs struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 const GUIDiMediaPropertiesChangedEventArgs string = "7d3741cb-adf0-5cef-91ba-cfabcdd77678"
 const SignatureiMediaPropertiesChangedEventArgs string = "{7d3741cb-adf0-5cef-91ba-cfabcdd77678}"
 
 type iMediaPropertiesChangedEventArgs struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iMediaPropertiesChangedEventArgsVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 }
 
 func (v *iMediaPropertiesChangedEventArgs) VTable() *iMediaPropertiesChangedEventArgsVtbl {

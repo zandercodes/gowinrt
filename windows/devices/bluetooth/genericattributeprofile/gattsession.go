@@ -9,61 +9,61 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/devices/bluetooth"
 	"github.com/zandercodes/gowinrt/windows/foundation"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattSession string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattSession;{d23b5143-e04e-4c24-999c-9c256f9856b1})"
 
 type GattSession struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattSession) GetCanMaintainConnection() (bool, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattSession))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattSession))
 	defer itf.Release()
 	v := (*iGattSession)(unsafe.Pointer(itf))
 	return v.GetCanMaintainConnection()
 }
 
 func (impl *GattSession) SetMaintainConnection(value bool) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattSession))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattSession))
 	defer itf.Release()
 	v := (*iGattSession)(unsafe.Pointer(itf))
 	return v.SetMaintainConnection(value)
 }
 
 func (impl *GattSession) GetMaintainConnection() (bool, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattSession))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattSession))
 	defer itf.Release()
 	v := (*iGattSession)(unsafe.Pointer(itf))
 	return v.GetMaintainConnection()
 }
 
 func (impl *GattSession) GetMaxPduSize() (uint16, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattSession))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattSession))
 	defer itf.Release()
 	v := (*iGattSession)(unsafe.Pointer(itf))
 	return v.GetMaxPduSize()
 }
 
 func (impl *GattSession) AddMaxPduSizeChanged(handler *foundation.TypedEventHandler) (foundation.EventRegistrationToken, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattSession))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattSession))
 	defer itf.Release()
 	v := (*iGattSession)(unsafe.Pointer(itf))
 	return v.AddMaxPduSizeChanged(handler)
 }
 
 func (impl *GattSession) RemoveMaxPduSizeChanged(token foundation.EventRegistrationToken) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattSession))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattSession))
 	defer itf.Release()
 	v := (*iGattSession)(unsafe.Pointer(itf))
 	return v.RemoveMaxPduSizeChanged(token)
 }
 
 func (impl *GattSession) Close() error {
-	itf := impl.MustQueryInterface(ole.NewGUID(foundation.GUIDIClosable))
+	itf := impl.MustQueryInterface(winrt.NewGUID(foundation.GUIDIClosable))
 	defer itf.Release()
 	v := (*foundation.IClosable)(unsafe.Pointer(itf))
 	return v.Close()
@@ -73,11 +73,11 @@ const GUIDiGattSession string = "d23b5143-e04e-4c24-999c-9c256f9856b1"
 const SignatureiGattSession string = "{d23b5143-e04e-4c24-999c-9c256f9856b1}"
 
 type iGattSession struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattSessionVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetDeviceId                uintptr
 	GetCanMaintainConnection   uintptr
@@ -104,7 +104,7 @@ func (v *iGattSession) GetCanMaintainConnection() (bool, error) {
 	)
 
 	if hr != 0 {
-		return false, ole.NewError(hr)
+		return false, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -118,7 +118,7 @@ func (v *iGattSession) SetMaintainConnection(value bool) error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -133,7 +133,7 @@ func (v *iGattSession) GetMaintainConnection() (bool, error) {
 	)
 
 	if hr != 0 {
-		return false, ole.NewError(hr)
+		return false, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -148,7 +148,7 @@ func (v *iGattSession) GetMaxPduSize() (uint16, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -164,7 +164,7 @@ func (v *iGattSession) AddMaxPduSizeChanged(handler *foundation.TypedEventHandle
 	)
 
 	if hr != 0 {
-		return foundation.EventRegistrationToken{}, ole.NewError(hr)
+		return foundation.EventRegistrationToken{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -178,7 +178,7 @@ func (v *iGattSession) RemoveMaxPduSizeChanged(token foundation.EventRegistratio
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -188,11 +188,11 @@ const GUIDiGattSessionStatics string = "2e65b95c-539f-4db7-82a8-73bdbbf73ebf"
 const SignatureiGattSessionStatics string = "{2e65b95c-539f-4db7-82a8-73bdbbf73ebf}"
 
 type iGattSessionStatics struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattSessionStaticsVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GattSessionFromDeviceIdAsync uintptr
 }
@@ -202,7 +202,7 @@ func (v *iGattSessionStatics) VTable() *iGattSessionStaticsVtbl {
 }
 
 func GattSessionFromDeviceIdAsync(deviceId *bluetooth.BluetoothDeviceId) (*foundation.IAsyncOperation, error) {
-	inspectable, err := ole.RoGetActivationFactory("Windows.Devices.Bluetooth.GenericAttributeProfile.GattSession", ole.NewGUID(GUIDiGattSessionStatics))
+	inspectable, err := winrt.RoGetActivationFactory("Windows.Devices.Bluetooth.GenericAttributeProfile.GattSession", winrt.NewGUID(GUIDiGattSessionStatics))
 	if err != nil {
 		return nil, err
 	}
@@ -217,7 +217,7 @@ func GattSessionFromDeviceIdAsync(deviceId *bluetooth.BluetoothDeviceId) (*found
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

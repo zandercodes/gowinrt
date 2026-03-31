@@ -3,7 +3,6 @@ module github.com/zandercodes/gowinrt
 go 1.26.1
 
 require (
-	github.com/go-ole/go-ole v1.3.0
 	github.com/microsoft/go-winmd v0.0.0-20260327081511-1e9031e6ad2b
 	github.com/rs/zerolog v1.35.0
 	github.com/spf13/cobra v1.10.2

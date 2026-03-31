@@ -9,25 +9,25 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation/collections"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattDeviceServicesResult string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattDeviceServicesResult;{171dd3ee-016d-419d-838a-576cf475a3d8})"
 
 type GattDeviceServicesResult struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattDeviceServicesResult) GetStatus() (GattCommunicationStatus, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattDeviceServicesResult))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattDeviceServicesResult))
 	defer itf.Release()
 	v := (*iGattDeviceServicesResult)(unsafe.Pointer(itf))
 	return v.GetStatus()
 }
 
 func (impl *GattDeviceServicesResult) GetServices() (*collections.IVectorView, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattDeviceServicesResult))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattDeviceServicesResult))
 	defer itf.Release()
 	v := (*iGattDeviceServicesResult)(unsafe.Pointer(itf))
 	return v.GetServices()
@@ -37,11 +37,11 @@ const GUIDiGattDeviceServicesResult string = "171dd3ee-016d-419d-838a-576cf475a3
 const SignatureiGattDeviceServicesResult string = "{171dd3ee-016d-419d-838a-576cf475a3d8}"
 
 type iGattDeviceServicesResult struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattDeviceServicesResultVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetStatus        uintptr
 	GetProtocolError uintptr
@@ -61,7 +61,7 @@ func (v *iGattDeviceServicesResult) GetStatus() (GattCommunicationStatus, error)
 	)
 
 	if hr != 0 {
-		return GattCommunicationStatusSuccess, ole.NewError(hr)
+		return GattCommunicationStatusSuccess, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -76,7 +76,7 @@ func (v *iGattDeviceServicesResult) GetServices() (*collections.IVectorView, err
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

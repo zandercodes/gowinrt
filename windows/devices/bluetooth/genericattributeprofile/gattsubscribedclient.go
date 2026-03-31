@@ -9,39 +9,39 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattSubscribedClient string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattSubscribedClient;{736e9001-15a4-4ec2-9248-e3f20d463be9})"
 
 type GattSubscribedClient struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattSubscribedClient) GetSession() (*GattSession, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattSubscribedClient))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattSubscribedClient))
 	defer itf.Release()
 	v := (*iGattSubscribedClient)(unsafe.Pointer(itf))
 	return v.GetSession()
 }
 
 func (impl *GattSubscribedClient) GetMaxNotificationSize() (uint16, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattSubscribedClient))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattSubscribedClient))
 	defer itf.Release()
 	v := (*iGattSubscribedClient)(unsafe.Pointer(itf))
 	return v.GetMaxNotificationSize()
 }
 
 func (impl *GattSubscribedClient) AddMaxNotificationSizeChanged(handler *foundation.TypedEventHandler) (foundation.EventRegistrationToken, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattSubscribedClient))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattSubscribedClient))
 	defer itf.Release()
 	v := (*iGattSubscribedClient)(unsafe.Pointer(itf))
 	return v.AddMaxNotificationSizeChanged(handler)
 }
 
 func (impl *GattSubscribedClient) RemoveMaxNotificationSizeChanged(token foundation.EventRegistrationToken) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattSubscribedClient))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattSubscribedClient))
 	defer itf.Release()
 	v := (*iGattSubscribedClient)(unsafe.Pointer(itf))
 	return v.RemoveMaxNotificationSizeChanged(token)
@@ -51,11 +51,11 @@ const GUIDiGattSubscribedClient string = "736e9001-15a4-4ec2-9248-e3f20d463be9"
 const SignatureiGattSubscribedClient string = "{736e9001-15a4-4ec2-9248-e3f20d463be9}"
 
 type iGattSubscribedClient struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattSubscribedClientVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetSession                       uintptr
 	GetMaxNotificationSize           uintptr
@@ -76,7 +76,7 @@ func (v *iGattSubscribedClient) GetSession() (*GattSession, error) {
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -91,7 +91,7 @@ func (v *iGattSubscribedClient) GetMaxNotificationSize() (uint16, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -107,7 +107,7 @@ func (v *iGattSubscribedClient) AddMaxNotificationSizeChanged(handler *foundatio
 	)
 
 	if hr != 0 {
-		return foundation.EventRegistrationToken{}, ole.NewError(hr)
+		return foundation.EventRegistrationToken{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -121,7 +121,7 @@ func (v *iGattSubscribedClient) RemoveMaxNotificationSizeChanged(token foundatio
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil

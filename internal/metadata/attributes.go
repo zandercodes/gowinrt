@@ -1,16 +1,4 @@
-/**
- * File: winmd.go
- * Project: winmd
- * Created Date: 2026‑03‑28T22:58:00.000+01:00
- * Author: ZanderCodes (Julian Zander) <admin@zandercodes.com>
- *
- * Last Modified: 2026‑03‑29T00:17:11.1111+01:00
- * Modified By: ZanderCodes (Julian Zander) <admin@zandercodes.com>
- *
- * Copyright © 2026 ZanderCodes (Julian Zander). All rights reserved.
- */
-
-package winmd
+package metadata
 
 import (
 	"bytes"
@@ -42,15 +30,15 @@ func (hctx *HasContext) Ctx() *winmd.Metadata {
 	return hctx.originalCtx
 }
 
-//go:embed metadata/*.winmd
+//go:embed embedded/*.winmd
 var files embed.FS
 
 func allFiles() ([]fs.DirEntry, error) {
-	return files.ReadDir("metadata")
+	return files.ReadDir("embedded")
 }
 
 func open(path string) (*pe.File, error) {
-	file, err := files.Open("metadata/" + path)
+	file, err := files.Open("embedded/" + path)
 	if err != nil {
 		return nil, err
 	}

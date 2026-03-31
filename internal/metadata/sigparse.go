@@ -1,4 +1,4 @@
-package gen
+package metadata
 
 import (
 	"fmt"
@@ -6,18 +6,18 @@ import (
 	winmd "github.com/microsoft/go-winmd/winmd"
 )
 
-// parseMethodSig parses a raw ECMA-335 MethodDefSig blob (§II.23.2.1) into a
+// ParseMethodSig parses a raw ECMA-335 MethodDefSig blob (§II.23.2.1) into a
 // winmd.SigMethodDef. It extends go-winmd's built-in parser by supporting
 // ElementType_GENERICINST, ElementType_VAR, ElementType_MVAR and
 // ElementType_SZARRAY which go-winmd does not yet decode.
-func parseMethodSig(data winmd.SigMethodDefBlob) (winmd.SigMethodDef, error) {
+func ParseMethodSig(data winmd.SigMethodDefBlob) (winmd.SigMethodDef, error) {
 	p := sigParser{data: []byte(data)}
 	sig := p.methodDefSig()
 	return sig, p.err
 }
 
-// parseFieldSig parses a raw ECMA-335 FieldSig blob (§II.23.2.4).
-func parseFieldSig(data winmd.SigFieldBlob) (winmd.SigField, error) {
+// ParseFieldSig parses a raw ECMA-335 FieldSig blob (§II.23.2.4).
+func ParseFieldSig(data winmd.SigFieldBlob) (winmd.SigField, error) {
 	p := sigParser{data: []byte(data)}
 	sig := p.fieldSig()
 	return sig, p.err
@@ -147,8 +147,7 @@ func (p *sigParser) decodeType() (v winmd.SigType) {
 		v.Kind = winmd.ElementType_VOID
 
 	case winmd.ElementType_GENERICINST:
-		// §II.23.2.12: GENERICINST (CLASS|VALUETYPE) TypeDefOrRefOrSpecEncoded GenArgCount Type*
-		_ = p.compressedUint32() // CLASS (0x12) or VALUETYPE (0x11) – consumed but not used
+		_ = p.compressedUint32() // CLASS (0x12) or VALUETYPE (0x11)
 		ci := p.typeDefOrRefOrSpec()
 		genArgCount := p.compressedUint32()
 		for i := uint32(0); i < genArgCount && p.err == nil; i++ {
@@ -162,7 +161,7 @@ func (p *sigParser) decodeType() (v winmd.SigType) {
 		v.Value = p.typeDefOrRefOrSpec()
 
 	case winmd.ElementType_VAR, winmd.ElementType_MVAR:
-		_ = p.compressedUint32() // generic parameter index – not used
+		_ = p.compressedUint32() // generic parameter index
 		v.Kind = winmd.ElementType_VAR
 
 	case winmd.ElementType_SZARRAY:
@@ -175,7 +174,6 @@ func (p *sigParser) decodeType() (v winmd.SigType) {
 		v.Value = p.decodeType()
 
 	case winmd.ElementType_ARRAY:
-		// §II.23.2.13: Type Rank NumSizes Size* NumLoBounds LoBound*
 		inner := p.decodeType()
 		rank := p.compressedUint32()
 		numSizes := p.compressedUint32()
@@ -184,7 +182,7 @@ func (p *sigParser) decodeType() (v winmd.SigType) {
 		}
 		numLoBounds := p.compressedUint32()
 		for i := uint32(0); i < numLoBounds && p.err == nil; i++ {
-			p.compressedUint32() // signed, but byte count is the same
+			p.compressedUint32()
 		}
 		v.Kind = b
 		v.Value = winmd.SigArray{Type: inner, Rank: rank}
@@ -206,7 +204,6 @@ func (p *sigParser) decodeType() (v winmd.SigType) {
 }
 
 // typeDefOrRefOrSpec decodes a TypeDefOrRefOrSpecEncoded value (§II.23.2.8).
-// 3 possible tables → 2 tag bits.
 func (p *sigParser) typeDefOrRefOrSpec() winmd.CodedIndex[winmd.TypeDefOrRefOrSpec] {
 	if p.err != nil {
 		return winmd.CodedIndex[winmd.TypeDefOrRefOrSpec]{}
@@ -238,8 +235,6 @@ func (p *sigParser) typeDefOrRefOrSpec() winmd.CodedIndex[winmd.TypeDefOrRefOrSp
 	return winmd.CodedIndex[winmd.TypeDefOrRefOrSpec]{Index: winmd.Index(row), Tag: t}
 }
 
-// ---- low-level byte reading ----
-
 func (p *sigParser) readByte() byte {
 	if p.err != nil {
 		return 0
@@ -265,12 +260,10 @@ func (p *sigParser) compressedUint32() uint32 {
 
 	v := p.data[0]
 	if v&0x80 == 0 {
-		// 1-byte: 0bbb_bbbb
 		p.data = p.data[1:]
 		return uint32(v)
 	}
 	if v&0xC0 == 0x80 {
-		// 2-byte: 10bb_bbbb xxxx_xxxx
 		if len(p.data) < 2 {
 			p.err = fmt.Errorf("unexpected end of signature blob")
 			return 0
@@ -280,7 +273,6 @@ func (p *sigParser) compressedUint32() uint32 {
 		return result
 	}
 	if v&0xE0 == 0xC0 {
-		// 4-byte: 110b_bbbb xxxx_xxxx xxxx_xxxx xxxx_xxxx
 		if len(p.data) < 4 {
 			p.err = fmt.Errorf("unexpected end of signature blob")
 			return 0

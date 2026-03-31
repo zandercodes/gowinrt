@@ -1,16 +1,4 @@
-/**
- * File: store.go
- * Project: winmd
- * Created Date: 2026‑03‑29T00:14:16.1616+01:00
- * Author: ZanderCodes (Julian Zander) <admin@zandercodes.com>
- *
- * Last Modified: 2026‑03‑29T00:16:49.4949+01:00
- * Modified By: ZanderCodes (Julian Zander) <admin@zandercodes.com>
- *
- * Copyright © 2026 ZanderCodes (Julian Zander). All rights reserved.
- */
-
-package winmd
+package metadata
 
 import (
 	"fmt"

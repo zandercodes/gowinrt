@@ -9,39 +9,39 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattClientNotificationResult string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattClientNotificationResult;{506d5599-0112-419a-8e3b-ae21afabd2c2})"
 
 type GattClientNotificationResult struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattClientNotificationResult) GetSubscribedClient() (*GattSubscribedClient, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattClientNotificationResult))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattClientNotificationResult))
 	defer itf.Release()
 	v := (*iGattClientNotificationResult)(unsafe.Pointer(itf))
 	return v.GetSubscribedClient()
 }
 
 func (impl *GattClientNotificationResult) GetStatus() (GattCommunicationStatus, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattClientNotificationResult))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattClientNotificationResult))
 	defer itf.Release()
 	v := (*iGattClientNotificationResult)(unsafe.Pointer(itf))
 	return v.GetStatus()
 }
 
 func (impl *GattClientNotificationResult) GetProtocolError() (*foundation.IReference, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattClientNotificationResult))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattClientNotificationResult))
 	defer itf.Release()
 	v := (*iGattClientNotificationResult)(unsafe.Pointer(itf))
 	return v.GetProtocolError()
 }
 
 func (impl *GattClientNotificationResult) GetBytesSent() (uint16, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattClientNotificationResult2))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattClientNotificationResult2))
 	defer itf.Release()
 	v := (*iGattClientNotificationResult2)(unsafe.Pointer(itf))
 	return v.GetBytesSent()
@@ -51,11 +51,11 @@ const GUIDiGattClientNotificationResult string = "506d5599-0112-419a-8e3b-ae21af
 const SignatureiGattClientNotificationResult string = "{506d5599-0112-419a-8e3b-ae21afabd2c2}"
 
 type iGattClientNotificationResult struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattClientNotificationResultVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetSubscribedClient uintptr
 	GetStatus           uintptr
@@ -75,7 +75,7 @@ func (v *iGattClientNotificationResult) GetSubscribedClient() (*GattSubscribedCl
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -90,7 +90,7 @@ func (v *iGattClientNotificationResult) GetStatus() (GattCommunicationStatus, er
 	)
 
 	if hr != 0 {
-		return GattCommunicationStatusSuccess, ole.NewError(hr)
+		return GattCommunicationStatusSuccess, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -105,7 +105,7 @@ func (v *iGattClientNotificationResult) GetProtocolError() (*foundation.IReferen
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -115,11 +115,11 @@ const GUIDiGattClientNotificationResult2 string = "8faec497-45e0-497e-9582-29a1f
 const SignatureiGattClientNotificationResult2 string = "{8faec497-45e0-497e-9582-29a1fe281ad5}"
 
 type iGattClientNotificationResult2 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattClientNotificationResult2Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetBytesSent uintptr
 }
@@ -137,7 +137,7 @@ func (v *iGattClientNotificationResult2) GetBytesSent() (uint16, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil

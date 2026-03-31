@@ -9,25 +9,25 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/devices/bluetooth"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattServiceProviderResult string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattServiceProviderResult;{764696d8-c53e-428c-8a48-67afe02c3ae6})"
 
 type GattServiceProviderResult struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattServiceProviderResult) GetError() (bluetooth.BluetoothError, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProviderResult))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProviderResult))
 	defer itf.Release()
 	v := (*iGattServiceProviderResult)(unsafe.Pointer(itf))
 	return v.GetError()
 }
 
 func (impl *GattServiceProviderResult) GetServiceProvider() (*GattServiceProvider, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattServiceProviderResult))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattServiceProviderResult))
 	defer itf.Release()
 	v := (*iGattServiceProviderResult)(unsafe.Pointer(itf))
 	return v.GetServiceProvider()
@@ -37,11 +37,11 @@ const GUIDiGattServiceProviderResult string = "764696d8-c53e-428c-8a48-67afe02c3
 const SignatureiGattServiceProviderResult string = "{764696d8-c53e-428c-8a48-67afe02c3ae6}"
 
 type iGattServiceProviderResult struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattServiceProviderResultVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetError           uintptr
 	GetServiceProvider uintptr
@@ -60,7 +60,7 @@ func (v *iGattServiceProviderResult) GetError() (bluetooth.BluetoothError, error
 	)
 
 	if hr != 0 {
-		return bluetooth.BluetoothErrorSuccess, ole.NewError(hr)
+		return bluetooth.BluetoothErrorSuccess, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -75,7 +75,7 @@ func (v *iGattServiceProviderResult) GetServiceProvider() (*GattServiceProvider,
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

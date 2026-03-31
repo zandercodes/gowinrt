@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation/collections"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureBluetoothLEAdvertisement string = "rc(Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisement;{066fb2b7-33d1-4e7d-8367-cf81d0f79653})"
 
 type BluetoothLEAdvertisement struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func NewBluetoothLEAdvertisement() (*BluetoothLEAdvertisement, error) {
-	inspectable, err := ole.RoActivateInstance("Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisement")
+	inspectable, err := winrt.RoActivateInstance("Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisement")
 	if err != nil {
 		return nil, err
 	}
@@ -28,35 +28,35 @@ func NewBluetoothLEAdvertisement() (*BluetoothLEAdvertisement, error) {
 }
 
 func (impl *BluetoothLEAdvertisement) GetLocalName() (string, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisement))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisement))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisement)(unsafe.Pointer(itf))
 	return v.GetLocalName()
 }
 
 func (impl *BluetoothLEAdvertisement) SetLocalName(value string) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisement))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisement))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisement)(unsafe.Pointer(itf))
 	return v.SetLocalName(value)
 }
 
 func (impl *BluetoothLEAdvertisement) GetServiceUuids() (*collections.IVector, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisement))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisement))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisement)(unsafe.Pointer(itf))
 	return v.GetServiceUuids()
 }
 
 func (impl *BluetoothLEAdvertisement) GetManufacturerData() (*collections.IVector, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisement))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisement))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisement)(unsafe.Pointer(itf))
 	return v.GetManufacturerData()
 }
 
 func (impl *BluetoothLEAdvertisement) GetDataSections() (*collections.IVector, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisement))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisement))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisement)(unsafe.Pointer(itf))
 	return v.GetDataSections()
@@ -66,11 +66,11 @@ const GUIDiBluetoothLEAdvertisement string = "066fb2b7-33d1-4e7d-8367-cf81d0f796
 const SignatureiBluetoothLEAdvertisement string = "{066fb2b7-33d1-4e7d-8367-cf81d0f79653}"
 
 type iBluetoothLEAdvertisement struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEAdvertisementVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetFlags                       uintptr
 	SetFlags                       uintptr
@@ -88,7 +88,7 @@ func (v *iBluetoothLEAdvertisement) VTable() *iBluetoothLEAdvertisementVtbl {
 }
 
 func (v *iBluetoothLEAdvertisement) GetLocalName() (string, error) {
-	var outHStr ole.HString
+	var outHStr winrt.HString
 	hr, _, _ := syscall.SyscallN(
 		v.VTable().GetLocalName,
 		uintptr(unsafe.Pointer(v)),        // this
@@ -96,16 +96,16 @@ func (v *iBluetoothLEAdvertisement) GetLocalName() (string, error) {
 	)
 
 	if hr != 0 {
-		return "", ole.NewError(hr)
+		return "", winrt.NewError(hr)
 	}
 
 	out := outHStr.String()
-	ole.DeleteHString(outHStr)
+	winrt.DeleteHString(outHStr)
 	return out, nil
 }
 
 func (v *iBluetoothLEAdvertisement) SetLocalName(value string) error {
-	valueHStr, err := ole.NewHString(value)
+	valueHStr, err := winrt.NewHString(value)
 	if err != nil {
 		return err
 	}
@@ -116,7 +116,7 @@ func (v *iBluetoothLEAdvertisement) SetLocalName(value string) error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -131,7 +131,7 @@ func (v *iBluetoothLEAdvertisement) GetServiceUuids() (*collections.IVector, err
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -146,7 +146,7 @@ func (v *iBluetoothLEAdvertisement) GetManufacturerData() (*collections.IVector,
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -161,7 +161,7 @@ func (v *iBluetoothLEAdvertisement) GetDataSections() (*collections.IVector, err
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

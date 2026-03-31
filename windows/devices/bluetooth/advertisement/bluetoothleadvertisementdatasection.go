@@ -9,17 +9,17 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureBluetoothLEAdvertisementDataSection string = "rc(Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementDataSection;{d7213314-3a43-40f9-b6f0-92bfefc34ae3})"
 
 type BluetoothLEAdvertisementDataSection struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func NewBluetoothLEAdvertisementDataSection() (*BluetoothLEAdvertisementDataSection, error) {
-	inspectable, err := ole.RoActivateInstance("Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementDataSection")
+	inspectable, err := winrt.RoActivateInstance("Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementDataSection")
 	if err != nil {
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func NewBluetoothLEAdvertisementDataSection() (*BluetoothLEAdvertisementDataSect
 }
 
 func (impl *BluetoothLEAdvertisementDataSection) GetDataType() (uint8, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementDataSection))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementDataSection))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementDataSection)(unsafe.Pointer(itf))
 	return v.GetDataType()
@@ -37,11 +37,11 @@ const GUIDiBluetoothLEAdvertisementDataSection string = "d7213314-3a43-40f9-b6f0
 const SignatureiBluetoothLEAdvertisementDataSection string = "{d7213314-3a43-40f9-b6f0-92bfefc34ae3}"
 
 type iBluetoothLEAdvertisementDataSection struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEAdvertisementDataSectionVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetDataType uintptr
 	SetDataType uintptr
@@ -62,7 +62,7 @@ func (v *iBluetoothLEAdvertisementDataSection) GetDataType() (uint8, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil

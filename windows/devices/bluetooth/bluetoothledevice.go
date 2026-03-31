@@ -9,60 +9,60 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureBluetoothLEDevice string = "rc(Windows.Devices.Bluetooth.BluetoothLEDevice;{b5ee2f7b-4ad8-4642-ac48-80a0b500e887})"
 
 type BluetoothLEDevice struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *BluetoothLEDevice) GetConnectionStatus() (BluetoothConnectionStatus, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEDevice))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEDevice))
 	defer itf.Release()
 	v := (*iBluetoothLEDevice)(unsafe.Pointer(itf))
 	return v.GetConnectionStatus()
 }
 
 func (impl *BluetoothLEDevice) AddConnectionStatusChanged(handler *foundation.TypedEventHandler) (foundation.EventRegistrationToken, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEDevice))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEDevice))
 	defer itf.Release()
 	v := (*iBluetoothLEDevice)(unsafe.Pointer(itf))
 	return v.AddConnectionStatusChanged(handler)
 }
 
 func (impl *BluetoothLEDevice) RemoveConnectionStatusChanged(token foundation.EventRegistrationToken) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEDevice))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEDevice))
 	defer itf.Release()
 	v := (*iBluetoothLEDevice)(unsafe.Pointer(itf))
 	return v.RemoveConnectionStatusChanged(token)
 }
 
 func (impl *BluetoothLEDevice) GetGattServicesAsync() (*foundation.IAsyncOperation, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEDevice3))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEDevice3))
 	defer itf.Release()
 	v := (*iBluetoothLEDevice3)(unsafe.Pointer(itf))
 	return v.GetGattServicesAsync()
 }
 
 func (impl *BluetoothLEDevice) GetGattServicesWithCacheModeAsync(cacheMode BluetoothCacheMode) (*foundation.IAsyncOperation, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEDevice3))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEDevice3))
 	defer itf.Release()
 	v := (*iBluetoothLEDevice3)(unsafe.Pointer(itf))
 	return v.GetGattServicesWithCacheModeAsync(cacheMode)
 }
 
 func (impl *BluetoothLEDevice) GetBluetoothDeviceId() (*BluetoothDeviceId, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEDevice4))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEDevice4))
 	defer itf.Release()
 	v := (*iBluetoothLEDevice4)(unsafe.Pointer(itf))
 	return v.GetBluetoothDeviceId()
 }
 
 func (impl *BluetoothLEDevice) Close() error {
-	itf := impl.MustQueryInterface(ole.NewGUID(foundation.GUIDIClosable))
+	itf := impl.MustQueryInterface(winrt.NewGUID(foundation.GUIDIClosable))
 	defer itf.Release()
 	v := (*foundation.IClosable)(unsafe.Pointer(itf))
 	return v.Close()
@@ -72,11 +72,11 @@ const GUIDiBluetoothLEDevice string = "b5ee2f7b-4ad8-4642-ac48-80a0b500e887"
 const SignatureiBluetoothLEDevice string = "{b5ee2f7b-4ad8-4642-ac48-80a0b500e887}"
 
 type iBluetoothLEDevice struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEDeviceVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetDeviceId                   uintptr
 	GetName                       uintptr
@@ -105,7 +105,7 @@ func (v *iBluetoothLEDevice) GetConnectionStatus() (BluetoothConnectionStatus, e
 	)
 
 	if hr != 0 {
-		return BluetoothConnectionStatusDisconnected, ole.NewError(hr)
+		return BluetoothConnectionStatusDisconnected, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -121,7 +121,7 @@ func (v *iBluetoothLEDevice) AddConnectionStatusChanged(handler *foundation.Type
 	)
 
 	if hr != 0 {
-		return foundation.EventRegistrationToken{}, ole.NewError(hr)
+		return foundation.EventRegistrationToken{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -135,7 +135,7 @@ func (v *iBluetoothLEDevice) RemoveConnectionStatusChanged(token foundation.Even
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -145,11 +145,11 @@ const GUIDiBluetoothLEDevice2 string = "26f062b3-7aee-4d31-baba-b1b9775f5916"
 const SignatureiBluetoothLEDevice2 string = "{26f062b3-7aee-4d31-baba-b1b9775f5916}"
 
 type iBluetoothLEDevice2 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEDevice2Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetDeviceInformation    uintptr
 	GetAppearance           uintptr
@@ -164,11 +164,11 @@ const GUIDiBluetoothLEDevice3 string = "aee9e493-44ac-40dc-af33-b2c13c01ca46"
 const SignatureiBluetoothLEDevice3 string = "{aee9e493-44ac-40dc-af33-b2c13c01ca46}"
 
 type iBluetoothLEDevice3 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEDevice3Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetDeviceAccessInformation               uintptr
 	RequestAccessAsync                       uintptr
@@ -191,7 +191,7 @@ func (v *iBluetoothLEDevice3) GetGattServicesAsync() (*foundation.IAsyncOperatio
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -207,7 +207,7 @@ func (v *iBluetoothLEDevice3) GetGattServicesWithCacheModeAsync(cacheMode Blueto
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -217,11 +217,11 @@ const GUIDiBluetoothLEDevice4 string = "2b605031-2248-4b2f-acf0-7cee36fc5870"
 const SignatureiBluetoothLEDevice4 string = "{2b605031-2248-4b2f-acf0-7cee36fc5870}"
 
 type iBluetoothLEDevice4 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEDevice4Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetBluetoothDeviceId uintptr
 }
@@ -239,7 +239,7 @@ func (v *iBluetoothLEDevice4) GetBluetoothDeviceId() (*BluetoothDeviceId, error)
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -249,11 +249,11 @@ const GUIDiBluetoothLEDevice5 string = "9d6a1260-5287-458e-95ba-17c8b7bb326e"
 const SignatureiBluetoothLEDevice5 string = "{9d6a1260-5287-458e-95ba-17c8b7bb326e}"
 
 type iBluetoothLEDevice5 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEDevice5Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetWasSecureConnectionUsedForPairing uintptr
 }
@@ -266,11 +266,11 @@ const GUIDiBluetoothLEDevice6 string = "ca7190ef-0cae-573c-a1ca-e1fc5bfc39e2"
 const SignatureiBluetoothLEDevice6 string = "{ca7190ef-0cae-573c-a1ca-e1fc5bfc39e2}"
 
 type iBluetoothLEDevice6 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEDevice6Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetConnectionParameters              uintptr
 	GetConnectionPhy                     uintptr
@@ -289,11 +289,11 @@ const GUIDiBluetoothLEDeviceStatics2 string = "5f12c06b-3bac-43e8-ad16-563271bd4
 const SignatureiBluetoothLEDeviceStatics2 string = "{5f12c06b-3bac-43e8-ad16-563271bd41c2}"
 
 type iBluetoothLEDeviceStatics2 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEDeviceStatics2Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	BluetoothLEDeviceGetDeviceSelectorFromPairingState                             uintptr
 	BluetoothLEDeviceGetDeviceSelectorFromConnectionStatus                         uintptr
@@ -309,7 +309,7 @@ func (v *iBluetoothLEDeviceStatics2) VTable() *iBluetoothLEDeviceStatics2Vtbl {
 }
 
 func BluetoothLEDeviceFromBluetoothAddressWithBluetoothAddressTypeAsync(bluetoothAddress uint64, bluetoothAddressType BluetoothAddressType) (*foundation.IAsyncOperation, error) {
-	inspectable, err := ole.RoGetActivationFactory("Windows.Devices.Bluetooth.BluetoothLEDevice", ole.NewGUID(GUIDiBluetoothLEDeviceStatics2))
+	inspectable, err := winrt.RoGetActivationFactory("Windows.Devices.Bluetooth.BluetoothLEDevice", winrt.NewGUID(GUIDiBluetoothLEDeviceStatics2))
 	if err != nil {
 		return nil, err
 	}
@@ -325,7 +325,7 @@ func BluetoothLEDeviceFromBluetoothAddressWithBluetoothAddressTypeAsync(bluetoot
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -335,11 +335,11 @@ const GUIDiBluetoothLEDeviceStatics string = "c8cf1a19-f0b6-4bf0-8689-41303de2d9
 const SignatureiBluetoothLEDeviceStatics string = "{c8cf1a19-f0b6-4bf0-8689-41303de2d9f4}"
 
 type iBluetoothLEDeviceStatics struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEDeviceStaticsVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	BluetoothLEDeviceFromIdAsync               uintptr
 	BluetoothLEDeviceFromBluetoothAddressAsync uintptr
@@ -351,7 +351,7 @@ func (v *iBluetoothLEDeviceStatics) VTable() *iBluetoothLEDeviceStaticsVtbl {
 }
 
 func BluetoothLEDeviceFromBluetoothAddressAsync(bluetoothAddress uint64) (*foundation.IAsyncOperation, error) {
-	inspectable, err := ole.RoGetActivationFactory("Windows.Devices.Bluetooth.BluetoothLEDevice", ole.NewGUID(GUIDiBluetoothLEDeviceStatics))
+	inspectable, err := winrt.RoGetActivationFactory("Windows.Devices.Bluetooth.BluetoothLEDevice", winrt.NewGUID(GUIDiBluetoothLEDeviceStatics))
 	if err != nil {
 		return nil, err
 	}
@@ -366,7 +366,7 @@ func BluetoothLEDeviceFromBluetoothAddressAsync(bluetoothAddress uint64) (*found
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

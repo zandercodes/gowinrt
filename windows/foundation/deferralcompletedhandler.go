@@ -10,23 +10,23 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/internal/delegate"
 	"github.com/zandercodes/gowinrt/internal/kernel32"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDDeferralCompletedHandler string = "ed32a372-f3c8-4faa-9cfb-470148da3888"
 const SignatureDeferralCompletedHandler string = "delegate({ed32a372-f3c8-4faa-9cfb-470148da3888})"
 
 type DeferralCompletedHandler struct {
-	ole.IUnknown
+	winrt.IUnknown
 	sync.Mutex
 	refs uintptr
-	IID  ole.GUID
+	IID  winrt.GUID
 }
 
 type DeferralCompletedHandlerVtbl struct {
-	ole.IUnknownVtbl
+	winrt.IUnknownVtbl
 	Invoke uintptr
 }
 
@@ -42,7 +42,7 @@ var releaseChannelsDeferralCompletedHandler = &deferralCompletedHandlerReleaseCh
 	chans: make(map[unsafe.Pointer]chan struct{}),
 }
 
-func NewDeferralCompletedHandler(iid *ole.GUID, callback DeferralCompletedHandlerCallback) *DeferralCompletedHandler {
+func NewDeferralCompletedHandler(iid *winrt.GUID, callback DeferralCompletedHandlerCallback) *DeferralCompletedHandler {
 	size := unsafe.Sizeof(*(*DeferralCompletedHandler)(nil))
 	instPtr := kernel32.Malloc(size)
 	inst := (*DeferralCompletedHandler)(instPtr)
@@ -55,7 +55,7 @@ func NewDeferralCompletedHandler(iid *ole.GUID, callback DeferralCompletedHandle
 	inst.RawVTable = (*interface{})(vTablePtr)
 
 	vTable := (*DeferralCompletedHandlerVtbl)(vTablePtr)
-	vTable.IUnknownVtbl = ole.IUnknownVtbl{
+	vTable.IUnknownVtbl = winrt.IUnknownVtbl{
 		QueryInterface: callbacks.QueryInterface,
 		AddRef:         callbacks.AddRef,
 		Release:        callbacks.Release,
@@ -73,7 +73,7 @@ func NewDeferralCompletedHandler(iid *ole.GUID, callback DeferralCompletedHandle
 	return inst
 }
 
-func (r *DeferralCompletedHandler) GetIID() *ole.GUID {
+func (r *DeferralCompletedHandler) GetIID() *winrt.GUID {
 	return &r.IID
 }
 
@@ -98,7 +98,7 @@ func (instance *DeferralCompletedHandler) Invoke(instancePtr, rawArgs0, rawArgs1
 	if callback, ok := callbacksDeferralCompletedHandler.get(instancePtr); ok {
 		callback(instance)
 	}
-	return ole.S_OK
+	return winrt.S_OK
 }
 
 func (instance *DeferralCompletedHandler) AddRef() uintptr {

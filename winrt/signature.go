@@ -1,14 +1,11 @@
-package signature
+package winrt
 
 import (
 	// #nosec — not used for security, required by WinRT spec
-
 	"crypto/sha1"
 	"encoding/binary"
 	"fmt"
 	"strings"
-
-	"github.com/go-ole/go-ole"
 )
 
 // Primitive type signatures used by the WinRT type system.
@@ -30,21 +27,18 @@ const (
 )
 
 // GUID namespace for parameterized (generic) WinRT interfaces and delegates.
-var namespace = ole.NewGUID("11f47ad5-7b73-42c0-abae-878b1e16adee")
+var guidNamespace = NewGUID("11f47ad5-7b73-42c0-abae-878b1e16adee")
 
 // ParameterizedInstanceGUID computes the GUID for a parameterized (generic)
 // WinRT interface or delegate, following the algorithm described in:
 // https://docs.microsoft.com/en-us/uwp/winrt-cref/winrt-type-system#guid-generation-for-parameterized-types
-//
-// baseGUID is the GUID of the uninstantiated generic type (without braces),
-// and signatures are the type signatures of each type argument.
 func ParameterizedInstanceGUID(baseGUID string, signatures ...string) string {
 	sig := fmt.Sprintf("pinterface({%s};%s)", baseGUID, strings.Join(signatures, ";"))
 	return guidFromSignature(sig)
 }
 
 func guidFromSignature(signature string) string {
-	nsBytes := guidToBytes(namespace)
+	nsBytes := guidToBytes(guidNamespace)
 
 	h := sha1.Sum(append(nsBytes, []byte(signature)...)) // #nosec
 
@@ -55,7 +49,7 @@ func guidFromSignature(signature string) string {
 	return bytesToGUID(h[:16]).String()
 }
 
-func guidToBytes(guid *ole.GUID) []byte {
+func guidToBytes(guid *GUID) []byte {
 	b := make([]byte, 16)
 
 	binary.BigEndian.PutUint32(b[0:4], guid.Data1)
@@ -66,8 +60,8 @@ func guidToBytes(guid *ole.GUID) []byte {
 	return b
 }
 
-func bytesToGUID(b []byte) *ole.GUID {
-	return &ole.GUID{
+func bytesToGUID(b []byte) *GUID {
+	return &GUID{
 		Data1: binary.BigEndian.Uint32(b[0:4]),
 		Data2: binary.BigEndian.Uint16(b[4:6]),
 		Data3: binary.BigEndian.Uint16(b[6:8]),

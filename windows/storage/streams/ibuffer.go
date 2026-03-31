@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDIBuffer string = "905a0fe0-bc53-11df-8c49-001e4fc686da"
 const SignatureIBuffer string = "{905a0fe0-bc53-11df-8c49-001e4fc686da}"
 
 type IBuffer struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type IBufferVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetCapacity uintptr
 	GetLength   uintptr
@@ -40,7 +40,7 @@ func (v *IBuffer) GetCapacity() (uint32, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -55,7 +55,7 @@ func (v *IBuffer) GetLength() (uint32, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -69,7 +69,7 @@ func (v *IBuffer) SetLength(value uint32) error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil

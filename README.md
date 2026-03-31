@@ -11,7 +11,7 @@ A Go code generator for [Windows Runtime (WinRT)](https://learn.microsoft.com/en
 - **Generic types** — custom ECMA-335 signature parser handles `GENERICINST`, `VAR`, `MVAR`, `SZARRAY`, `BYREF`, and `ARRAY`
 - **Method filtering** — generate only the methods you need with include/exclude patterns
 - **`go generate` friendly** — designed to run as a `//go:generate` directive
-- **Pure Go** — uses `syscall.SyscallN` via [go-ole](https://github.com/go-ole/go-ole), no CGo dependency
+- **Pure Go** — uses `syscall.SyscallN` with a built-in `winrt` package, no CGo or external COM dependencies
 - **Parameterized GUIDs** — runtime helper to compute GUIDs for generic WinRT types (RFC 4122 v5)
 - **Formatted output** — generated code is automatically processed by `goimports` and `go/format`
 
@@ -68,8 +68,8 @@ Usage:
 Flags:
   -c, --class string             WinRT class to generate (e.g. Windows.Foundation.Uri)
   -f, --method-filter strings    Filter methods (e.g. -f GetResults -f '!*')
-      --inheritance              Include inherited interface methods as wrappers
-      --validate                 Validate generated files match without writing
+  -i, --inheritance              Include inherited interface methods as wrappers
+  -V, --validate                 Validate generated files match without writing
   -v, --verbose                  Enable debug output
   -h, --help                     Show help
 ```
@@ -98,36 +98,32 @@ Methods are evaluated in order. Use `-f GetResults -f Close -f '!*'` to generate
 
 ```
 cmd/gowinrt/          CLI entry point
-signature/            Parameterized GUID computation & type signature constants
+winrt/                WinRT runtime types (IUnknown, IInspectable, GUID, HString, 
+│                       parameterized GUID computation, type signature constants)
+tests/                All tests (generation, runtime, GUID)
 internal/
-├── cli/              Cobra command setup
-├── gen/
-│   ├── gen.go            Main generation pipeline
-│   ├── gen_types.go      Type creators (interface, class, enum, struct, delegate)
-│   ├── gen_methods.go    Method & parameter helpers
-│   ├── gen_resolve.go    Field/method resolution, element type mapping
-│   ├── gen_signature.go  WinRT type signature generation
-│   ├── sigparse.go       Custom ECMA-335 signature blob parser
-│   ├── types.go          Template data types (genData, genFunc, genParam, …)
-│   ├── templates.go      Template engine (embed, load, custom functions)
-│   ├── naming.go         Naming helpers (toGoName, typePackage, …)
-│   ├── config.go         Configuration
-│   ├── filter.go         Method filter logic
-│   └── templates/        Go text/template files (11 templates)
-├── winmd/            WinRT metadata store (wraps go-winmd)
-├── kernel32/         Heap allocation for delegate VTables
-└── delegate/         Delegate callback registration
+├─ cli/              Cobra command setup
+├─ delegate/         Delegate callback registration
+├─ emit/             Template rendering & file output
+├─ gen/              Template engine & template files
+├─ ir/               Intermediate representation types
+├─ kernel32/         Heap allocation for delegate VTables
+├─ logger/           Logging setup
+├─ mapgo/            Go import path computation
+├─ metadata/         WinRT metadata store (wraps go-winmd)
+└─ resolve/          Type resolution, naming, filtering, signature parsing
+windows/              Generated WinRT bindings
 ```
 
 ### Parameterized GUIDs
 
-Generic WinRT types (e.g. `IAsyncOperation<T>`) don't have a fixed GUID — it must be computed at runtime from the base GUID and the type arguments' signatures. The `signature` package implements this per the [WinRT type system spec](https://docs.microsoft.com/en-us/uwp/winrt-cref/winrt-type-system#guid-generation-for-parameterized-types):
+Generic WinRT types (e.g. `IAsyncOperation<T>`) don't have a fixed GUID — it must be computed at runtime from the base GUID and the type arguments' signatures. The `winrt` package implements this per the [WinRT type system spec](https://docs.microsoft.com/en-us/uwp/winrt-cref/winrt-type-system#guid-generation-for-parameterized-types):
 
 ```go
-import "github.com/zandercodes/gowinrt/signature"
+import "github.com/zandercodes/gowinrt/winrt"
 
 // TypedEventHandler<Watcher, ReceivedEventArgs>
-guid := signature.ParameterizedInstanceGUID(
+guid := winrt.ParameterizedInstanceGUID(
     "9de1c534-6ae1-11e0-84e1-18a905bcc53f",
     "rc(Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementWatcher;{a6ac336f-f3d3-4297-8d6c-c81ea6623f40})",
     "rc(Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementReceivedEventArgs;{27987ddf-e596-41be-8d43-9e6731d4a913})",
@@ -137,7 +133,7 @@ guid := signature.ParameterizedInstanceGUID(
 
 ### Signature Parser
 
-WinRT metadata encodes method signatures as ECMA-335 blobs. The built-in `go-winmd` parser does not yet support generic instantiations (`GENERICINST`). `gowinrt` includes a custom signature parser ([`sigparse.go`](internal/gen/sigparse.go)) that handles:
+WinRT metadata encodes method signatures as ECMA-335 blobs. The built-in `go-winmd` parser does not yet support generic instantiations (`GENERICINST`). `gowinrt` includes a custom signature parser ([`sigparse.go`](internal/metadata/sigparse.go)) that handles:
 
 - `GENERICINST` — Generic type instantiations (e.g. `IAsyncOperation<T>`)
 - `VAR` / `MVAR` — Generic type/method parameters → mapped to `unsafe.Pointer`
@@ -171,18 +167,18 @@ import (
     "syscall"
     "unsafe"
 
-    "github.com/go-ole/go-ole"
+    "github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDIClosable string = "30d5a829-7fa4-4026-83bb-d75bae4ea99c"
 const SignatureIClosable string = "{30d5a829-7fa4-4026-83bb-d75bae4ea99c}"
 
 type IClosable struct {
-    ole.IInspectable
+    winrt.IInspectable
 }
 
 type IClosableVtbl struct {
-    ole.IInspectableVtbl
+    winrt.IInspectableVtbl
     Close uintptr
 }
 
@@ -196,7 +192,7 @@ func (v *IClosable) Close() error {
         uintptr(unsafe.Pointer(v)),
     )
     if hr != 0 {
-        return ole.NewError(hr)
+        return winrt.NewError(hr)
     }
     return nil
 }
@@ -211,14 +207,14 @@ func (v *IClosable) Close() error {
 | Package | Purpose |
 |---------|---------|
 | [`go-winmd`](https://github.com/microsoft/go-winmd) | ECMA-335 metadata reader |
-| [`go-ole`](https://github.com/go-ole/go-ole) | COM/OLE interop (IUnknown, IInspectable, HString) |
 | [`cobra`](https://github.com/spf13/cobra) | CLI framework |
 | [`zerolog`](https://github.com/rs/zerolog) | Structured logging |
 | [`x/tools`](https://pkg.go.dev/golang.org/x/tools) | `goimports` for import cleanup |
+| [`x/sys`](https://pkg.go.dev/golang.org/x/sys) | Windows DLL loading (`combase.dll`) |
 
 ## Credits
 
-This project builds on the excellent work of [winrt-go](https://github.com/saltosystems/winrt-go) by Salto Systems, reimplemented with Microsoft's official `go-winmd` metadata library.
+This project based on the excellent work of [winrt-go](https://github.com/saltosystems/winrt-go) by Salto Systems, reimplemented with Microsoft's official `go-winmd` metadata library.
 
 ## License
 

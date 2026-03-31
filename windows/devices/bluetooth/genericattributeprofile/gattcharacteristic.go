@@ -9,76 +9,76 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/devices/bluetooth"
 	"github.com/zandercodes/gowinrt/windows/foundation"
 	"github.com/zandercodes/gowinrt/windows/storage/streams"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattCharacteristic string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattCharacteristic;{59cb50c1-5934-4f68-a198-eb864fa44e6b})"
 
 type GattCharacteristic struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattCharacteristic) GetCharacteristicProperties() (GattCharacteristicProperties, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattCharacteristic))
 	defer itf.Release()
 	v := (*iGattCharacteristic)(unsafe.Pointer(itf))
 	return v.GetCharacteristicProperties()
 }
 
 func (impl *GattCharacteristic) GetUuid() (syscall.GUID, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattCharacteristic))
 	defer itf.Release()
 	v := (*iGattCharacteristic)(unsafe.Pointer(itf))
 	return v.GetUuid()
 }
 
 func (impl *GattCharacteristic) ReadValueAsync() (*foundation.IAsyncOperation, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattCharacteristic))
 	defer itf.Release()
 	v := (*iGattCharacteristic)(unsafe.Pointer(itf))
 	return v.ReadValueAsync()
 }
 
 func (impl *GattCharacteristic) ReadValueWithCacheModeAsync(cacheMode bluetooth.BluetoothCacheMode) (*foundation.IAsyncOperation, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattCharacteristic))
 	defer itf.Release()
 	v := (*iGattCharacteristic)(unsafe.Pointer(itf))
 	return v.ReadValueWithCacheModeAsync(cacheMode)
 }
 
 func (impl *GattCharacteristic) WriteValueAsync(value *streams.IBuffer) (*foundation.IAsyncOperation, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattCharacteristic))
 	defer itf.Release()
 	v := (*iGattCharacteristic)(unsafe.Pointer(itf))
 	return v.WriteValueAsync(value)
 }
 
 func (impl *GattCharacteristic) WriteValueWithOptionAsync(value *streams.IBuffer, writeOption GattWriteOption) (*foundation.IAsyncOperation, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattCharacteristic))
 	defer itf.Release()
 	v := (*iGattCharacteristic)(unsafe.Pointer(itf))
 	return v.WriteValueWithOptionAsync(value, writeOption)
 }
 
 func (impl *GattCharacteristic) WriteClientCharacteristicConfigurationDescriptorAsync(clientCharacteristicConfigurationDescriptorValue GattClientCharacteristicConfigurationDescriptorValue) (*foundation.IAsyncOperation, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattCharacteristic))
 	defer itf.Release()
 	v := (*iGattCharacteristic)(unsafe.Pointer(itf))
 	return v.WriteClientCharacteristicConfigurationDescriptorAsync(clientCharacteristicConfigurationDescriptorValue)
 }
 
 func (impl *GattCharacteristic) AddValueChanged(valueChangedHandler *foundation.TypedEventHandler) (foundation.EventRegistrationToken, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattCharacteristic))
 	defer itf.Release()
 	v := (*iGattCharacteristic)(unsafe.Pointer(itf))
 	return v.AddValueChanged(valueChangedHandler)
 }
 
 func (impl *GattCharacteristic) RemoveValueChanged(valueChangedEventCookie foundation.EventRegistrationToken) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattCharacteristic))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattCharacteristic))
 	defer itf.Release()
 	v := (*iGattCharacteristic)(unsafe.Pointer(itf))
 	return v.RemoveValueChanged(valueChangedEventCookie)
@@ -88,11 +88,11 @@ const GUIDiGattCharacteristic string = "59cb50c1-5934-4f68-a198-eb864fa44e6b"
 const SignatureiGattCharacteristic string = "{59cb50c1-5934-4f68-a198-eb864fa44e6b}"
 
 type iGattCharacteristic struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattCharacteristicVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetDescriptors                                        uintptr
 	GetCharacteristicProperties                           uintptr
@@ -125,7 +125,7 @@ func (v *iGattCharacteristic) GetCharacteristicProperties() (GattCharacteristicP
 	)
 
 	if hr != 0 {
-		return GattCharacteristicPropertiesNone, ole.NewError(hr)
+		return GattCharacteristicPropertiesNone, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -140,7 +140,7 @@ func (v *iGattCharacteristic) GetUuid() (syscall.GUID, error) {
 	)
 
 	if hr != 0 {
-		return syscall.GUID{}, ole.NewError(hr)
+		return syscall.GUID{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -155,7 +155,7 @@ func (v *iGattCharacteristic) ReadValueAsync() (*foundation.IAsyncOperation, err
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -171,7 +171,7 @@ func (v *iGattCharacteristic) ReadValueWithCacheModeAsync(cacheMode bluetooth.Bl
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -187,7 +187,7 @@ func (v *iGattCharacteristic) WriteValueAsync(value *streams.IBuffer) (*foundati
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -204,7 +204,7 @@ func (v *iGattCharacteristic) WriteValueWithOptionAsync(value *streams.IBuffer, 
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -220,7 +220,7 @@ func (v *iGattCharacteristic) WriteClientCharacteristicConfigurationDescriptorAs
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -236,7 +236,7 @@ func (v *iGattCharacteristic) AddValueChanged(valueChangedHandler *foundation.Ty
 	)
 
 	if hr != 0 {
-		return foundation.EventRegistrationToken{}, ole.NewError(hr)
+		return foundation.EventRegistrationToken{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -250,7 +250,7 @@ func (v *iGattCharacteristic) RemoveValueChanged(valueChangedEventCookie foundat
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -260,11 +260,11 @@ const GUIDiGattCharacteristic2 string = "ae1ab578-ec06-4764-b780-9835a1d35d6e"
 const SignatureiGattCharacteristic2 string = "{ae1ab578-ec06-4764-b780-9835a1d35d6e}"
 
 type iGattCharacteristic2 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattCharacteristic2Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetService        uintptr
 	GetAllDescriptors uintptr
@@ -278,11 +278,11 @@ const GUIDiGattCharacteristic3 string = "3f3c663e-93d4-406b-b817-db81f8ed53b3"
 const SignatureiGattCharacteristic3 string = "{3f3c663e-93d4-406b-b817-db81f8ed53b3}"
 
 type iGattCharacteristic3 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattCharacteristic3Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetDescriptorsAsync                                             uintptr
 	GetDescriptorsWithCacheModeAsync                                uintptr

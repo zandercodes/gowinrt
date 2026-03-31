@@ -9,32 +9,32 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGlobalSystemMediaTransportControlsSession string = "rc(Windows.Media.Control.GlobalSystemMediaTransportControlsSession;{7148c835-9b14-5ae2-ab85-dc9b1c14e1a8})"
 
 type GlobalSystemMediaTransportControlsSession struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GlobalSystemMediaTransportControlsSession) TryGetMediaPropertiesAsync() (*foundation.IAsyncOperation, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSession))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGlobalSystemMediaTransportControlsSession))
 	defer itf.Release()
 	v := (*iGlobalSystemMediaTransportControlsSession)(unsafe.Pointer(itf))
 	return v.TryGetMediaPropertiesAsync()
 }
 
 func (impl *GlobalSystemMediaTransportControlsSession) AddMediaPropertiesChanged(handler *foundation.TypedEventHandler) (foundation.EventRegistrationToken, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSession))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGlobalSystemMediaTransportControlsSession))
 	defer itf.Release()
 	v := (*iGlobalSystemMediaTransportControlsSession)(unsafe.Pointer(itf))
 	return v.AddMediaPropertiesChanged(handler)
 }
 
 func (impl *GlobalSystemMediaTransportControlsSession) RemoveMediaPropertiesChanged(token foundation.EventRegistrationToken) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSession))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGlobalSystemMediaTransportControlsSession))
 	defer itf.Release()
 	v := (*iGlobalSystemMediaTransportControlsSession)(unsafe.Pointer(itf))
 	return v.RemoveMediaPropertiesChanged(token)
@@ -44,11 +44,11 @@ const GUIDiGlobalSystemMediaTransportControlsSession string = "7148c835-9b14-5ae
 const SignatureiGlobalSystemMediaTransportControlsSession string = "{7148c835-9b14-5ae2-ab85-dc9b1c14e1a8}"
 
 type iGlobalSystemMediaTransportControlsSession struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGlobalSystemMediaTransportControlsSessionVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetSourceAppUserModelId         uintptr
 	TryGetMediaPropertiesAsync      uintptr
@@ -90,7 +90,7 @@ func (v *iGlobalSystemMediaTransportControlsSession) TryGetMediaPropertiesAsync(
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -106,7 +106,7 @@ func (v *iGlobalSystemMediaTransportControlsSession) AddMediaPropertiesChanged(h
 	)
 
 	if hr != 0 {
-		return foundation.EventRegistrationToken{}, ole.NewError(hr)
+		return foundation.EventRegistrationToken{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -120,7 +120,7 @@ func (v *iGlobalSystemMediaTransportControlsSession) RemoveMediaPropertiesChange
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil

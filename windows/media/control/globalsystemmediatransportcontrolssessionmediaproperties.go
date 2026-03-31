@@ -9,32 +9,32 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/storage/streams"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGlobalSystemMediaTransportControlsSessionMediaProperties string = "rc(Windows.Media.Control.GlobalSystemMediaTransportControlsSessionMediaProperties;{68856cf6-adb4-54b2-ac16-05837907acb6})"
 
 type GlobalSystemMediaTransportControlsSessionMediaProperties struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GlobalSystemMediaTransportControlsSessionMediaProperties) GetTitle() (string, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionMediaProperties))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionMediaProperties))
 	defer itf.Release()
 	v := (*iGlobalSystemMediaTransportControlsSessionMediaProperties)(unsafe.Pointer(itf))
 	return v.GetTitle()
 }
 
 func (impl *GlobalSystemMediaTransportControlsSessionMediaProperties) GetArtist() (string, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionMediaProperties))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionMediaProperties))
 	defer itf.Release()
 	v := (*iGlobalSystemMediaTransportControlsSessionMediaProperties)(unsafe.Pointer(itf))
 	return v.GetArtist()
 }
 
 func (impl *GlobalSystemMediaTransportControlsSessionMediaProperties) GetThumbnail() (*streams.IRandomAccessStreamReference, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionMediaProperties))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGlobalSystemMediaTransportControlsSessionMediaProperties))
 	defer itf.Release()
 	v := (*iGlobalSystemMediaTransportControlsSessionMediaProperties)(unsafe.Pointer(itf))
 	return v.GetThumbnail()
@@ -44,11 +44,11 @@ const GUIDiGlobalSystemMediaTransportControlsSessionMediaProperties string = "68
 const SignatureiGlobalSystemMediaTransportControlsSessionMediaProperties string = "{68856cf6-adb4-54b2-ac16-05837907acb6}"
 
 type iGlobalSystemMediaTransportControlsSessionMediaProperties struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGlobalSystemMediaTransportControlsSessionMediaPropertiesVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetTitle           uintptr
 	GetSubtitle        uintptr
@@ -67,7 +67,7 @@ func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) VTable() *iG
 }
 
 func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) GetTitle() (string, error) {
-	var outHStr ole.HString
+	var outHStr winrt.HString
 	hr, _, _ := syscall.SyscallN(
 		v.VTable().GetTitle,
 		uintptr(unsafe.Pointer(v)),        // this
@@ -75,16 +75,16 @@ func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) GetTitle() (
 	)
 
 	if hr != 0 {
-		return "", ole.NewError(hr)
+		return "", winrt.NewError(hr)
 	}
 
 	out := outHStr.String()
-	ole.DeleteHString(outHStr)
+	winrt.DeleteHString(outHStr)
 	return out, nil
 }
 
 func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) GetArtist() (string, error) {
-	var outHStr ole.HString
+	var outHStr winrt.HString
 	hr, _, _ := syscall.SyscallN(
 		v.VTable().GetArtist,
 		uintptr(unsafe.Pointer(v)),        // this
@@ -92,11 +92,11 @@ func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) GetArtist() 
 	)
 
 	if hr != 0 {
-		return "", ole.NewError(hr)
+		return "", winrt.NewError(hr)
 	}
 
 	out := outHStr.String()
-	ole.DeleteHString(outHStr)
+	winrt.DeleteHString(outHStr)
 	return out, nil
 }
 
@@ -109,7 +109,7 @@ func (v *iGlobalSystemMediaTransportControlsSessionMediaProperties) GetThumbnail
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

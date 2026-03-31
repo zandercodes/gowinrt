@@ -10,23 +10,23 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/internal/delegate"
 	"github.com/zandercodes/gowinrt/internal/kernel32"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDAsyncOperationProgressHandler string = "55690902-0aab-421a-8778-f8ce5026d758"
 const SignatureAsyncOperationProgressHandler string = "delegate({55690902-0aab-421a-8778-f8ce5026d758})"
 
 type AsyncOperationProgressHandler struct {
-	ole.IUnknown
+	winrt.IUnknown
 	sync.Mutex
 	refs uintptr
-	IID  ole.GUID
+	IID  winrt.GUID
 }
 
 type AsyncOperationProgressHandlerVtbl struct {
-	ole.IUnknownVtbl
+	winrt.IUnknownVtbl
 	Invoke uintptr
 }
 
@@ -42,7 +42,7 @@ var releaseChannelsAsyncOperationProgressHandler = &asyncOperationProgressHandle
 	chans: make(map[unsafe.Pointer]chan struct{}),
 }
 
-func NewAsyncOperationProgressHandler(iid *ole.GUID, callback AsyncOperationProgressHandlerCallback) *AsyncOperationProgressHandler {
+func NewAsyncOperationProgressHandler(iid *winrt.GUID, callback AsyncOperationProgressHandlerCallback) *AsyncOperationProgressHandler {
 	size := unsafe.Sizeof(*(*AsyncOperationProgressHandler)(nil))
 	instPtr := kernel32.Malloc(size)
 	inst := (*AsyncOperationProgressHandler)(instPtr)
@@ -55,7 +55,7 @@ func NewAsyncOperationProgressHandler(iid *ole.GUID, callback AsyncOperationProg
 	inst.RawVTable = (*interface{})(vTablePtr)
 
 	vTable := (*AsyncOperationProgressHandlerVtbl)(vTablePtr)
-	vTable.IUnknownVtbl = ole.IUnknownVtbl{
+	vTable.IUnknownVtbl = winrt.IUnknownVtbl{
 		QueryInterface: callbacks.QueryInterface,
 		AddRef:         callbacks.AddRef,
 		Release:        callbacks.Release,
@@ -73,7 +73,7 @@ func NewAsyncOperationProgressHandler(iid *ole.GUID, callback AsyncOperationProg
 	return inst
 }
 
-func (r *AsyncOperationProgressHandler) GetIID() *ole.GUID {
+func (r *AsyncOperationProgressHandler) GetIID() *winrt.GUID {
 	return &r.IID
 }
 
@@ -102,7 +102,7 @@ func (instance *AsyncOperationProgressHandler) Invoke(instancePtr, rawArgs0, raw
 	if callback, ok := callbacksAsyncOperationProgressHandler.get(instancePtr); ok {
 		callback(instance, asyncInfo, progressInfo)
 	}
-	return ole.S_OK
+	return winrt.S_OK
 }
 
 func (instance *AsyncOperationProgressHandler) AddRef() uintptr {

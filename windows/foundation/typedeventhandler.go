@@ -10,23 +10,23 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/internal/delegate"
 	"github.com/zandercodes/gowinrt/internal/kernel32"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDTypedEventHandler string = "9de1c534-6ae1-11e0-84e1-18a905bcc53f"
 const SignatureTypedEventHandler string = "delegate({9de1c534-6ae1-11e0-84e1-18a905bcc53f})"
 
 type TypedEventHandler struct {
-	ole.IUnknown
+	winrt.IUnknown
 	sync.Mutex
 	refs uintptr
-	IID  ole.GUID
+	IID  winrt.GUID
 }
 
 type TypedEventHandlerVtbl struct {
-	ole.IUnknownVtbl
+	winrt.IUnknownVtbl
 	Invoke uintptr
 }
 
@@ -42,7 +42,7 @@ var releaseChannelsTypedEventHandler = &typedEventHandlerReleaseChannels{
 	chans: make(map[unsafe.Pointer]chan struct{}),
 }
 
-func NewTypedEventHandler(iid *ole.GUID, callback TypedEventHandlerCallback) *TypedEventHandler {
+func NewTypedEventHandler(iid *winrt.GUID, callback TypedEventHandlerCallback) *TypedEventHandler {
 	size := unsafe.Sizeof(*(*TypedEventHandler)(nil))
 	instPtr := kernel32.Malloc(size)
 	inst := (*TypedEventHandler)(instPtr)
@@ -55,7 +55,7 @@ func NewTypedEventHandler(iid *ole.GUID, callback TypedEventHandlerCallback) *Ty
 	inst.RawVTable = (*interface{})(vTablePtr)
 
 	vTable := (*TypedEventHandlerVtbl)(vTablePtr)
-	vTable.IUnknownVtbl = ole.IUnknownVtbl{
+	vTable.IUnknownVtbl = winrt.IUnknownVtbl{
 		QueryInterface: callbacks.QueryInterface,
 		AddRef:         callbacks.AddRef,
 		Release:        callbacks.Release,
@@ -73,7 +73,7 @@ func NewTypedEventHandler(iid *ole.GUID, callback TypedEventHandlerCallback) *Ty
 	return inst
 }
 
-func (r *TypedEventHandler) GetIID() *ole.GUID {
+func (r *TypedEventHandler) GetIID() *winrt.GUID {
 	return &r.IID
 }
 
@@ -102,7 +102,7 @@ func (instance *TypedEventHandler) Invoke(instancePtr, rawArgs0, rawArgs1, rawAr
 	if callback, ok := callbacksTypedEventHandler.get(instancePtr); ok {
 		callback(instance, sender, args)
 	}
-	return ole.S_OK
+	return winrt.S_OK
 }
 
 func (instance *TypedEventHandler) AddRef() uintptr {

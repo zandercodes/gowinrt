@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDIAsyncInfo string = "00000036-0000-0000-c000-000000000046"
 const SignatureIAsyncInfo string = "{00000036-0000-0000-c000-000000000046}"
 
 type IAsyncInfo struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type IAsyncInfoVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetId        uintptr
 	GetStatus    uintptr
@@ -42,7 +42,7 @@ func (v *IAsyncInfo) GetId() (uint32, error) {
 	)
 
 	if hr != 0 {
-		return 0, ole.NewError(hr)
+		return 0, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -57,7 +57,7 @@ func (v *IAsyncInfo) GetStatus() (AsyncStatus, error) {
 	)
 
 	if hr != 0 {
-		return AsyncStatusCanceled, ole.NewError(hr)
+		return AsyncStatusCanceled, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -72,7 +72,7 @@ func (v *IAsyncInfo) GetErrorCode() (HResult, error) {
 	)
 
 	if hr != 0 {
-		return HResult{}, ole.NewError(hr)
+		return HResult{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -85,7 +85,7 @@ func (v *IAsyncInfo) Cancel() error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -98,7 +98,7 @@ func (v *IAsyncInfo) Close() error {
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil

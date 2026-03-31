@@ -9,40 +9,40 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/devices/bluetooth"
 	"github.com/zandercodes/gowinrt/windows/foundation"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattDeviceService string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattDeviceService;{ac7b7c05-b33c-47cf-990f-6b8f5577df71})"
 
 type GattDeviceService struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattDeviceService) GetUuid() (syscall.GUID, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattDeviceService))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattDeviceService))
 	defer itf.Release()
 	v := (*iGattDeviceService)(unsafe.Pointer(itf))
 	return v.GetUuid()
 }
 
 func (impl *GattDeviceService) Close() error {
-	itf := impl.MustQueryInterface(ole.NewGUID(foundation.GUIDIClosable))
+	itf := impl.MustQueryInterface(winrt.NewGUID(foundation.GUIDIClosable))
 	defer itf.Release()
 	v := (*foundation.IClosable)(unsafe.Pointer(itf))
 	return v.Close()
 }
 
 func (impl *GattDeviceService) GetCharacteristicsAsync() (*foundation.IAsyncOperation, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattDeviceService3))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattDeviceService3))
 	defer itf.Release()
 	v := (*iGattDeviceService3)(unsafe.Pointer(itf))
 	return v.GetCharacteristicsAsync()
 }
 
 func (impl *GattDeviceService) GetCharacteristicsWithCacheModeAsync(cacheMode bluetooth.BluetoothCacheMode) (*foundation.IAsyncOperation, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattDeviceService3))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattDeviceService3))
 	defer itf.Release()
 	v := (*iGattDeviceService3)(unsafe.Pointer(itf))
 	return v.GetCharacteristicsWithCacheModeAsync(cacheMode)
@@ -52,11 +52,11 @@ const GUIDiGattDeviceService string = "ac7b7c05-b33c-47cf-990f-6b8f5577df71"
 const SignatureiGattDeviceService string = "{ac7b7c05-b33c-47cf-990f-6b8f5577df71}"
 
 type iGattDeviceService struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattDeviceServiceVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetCharacteristics  uintptr
 	GetIncludedServices uintptr
@@ -78,7 +78,7 @@ func (v *iGattDeviceService) GetUuid() (syscall.GUID, error) {
 	)
 
 	if hr != 0 {
-		return syscall.GUID{}, ole.NewError(hr)
+		return syscall.GUID{}, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -88,11 +88,11 @@ const GUIDiGattDeviceService2 string = "fc54520b-0b0d-4708-bae0-9ffd9489bc59"
 const SignatureiGattDeviceService2 string = "{fc54520b-0b0d-4708-bae0-9ffd9489bc59}"
 
 type iGattDeviceService2 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattDeviceService2Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetDevice              uintptr
 	GetParentServices      uintptr
@@ -108,11 +108,11 @@ const GUIDiGattDeviceService3 string = "b293a950-0c53-437c-a9b3-5c3210c6e569"
 const SignatureiGattDeviceService3 string = "{b293a950-0c53-437c-a9b3-5c3210c6e569}"
 
 type iGattDeviceService3 struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattDeviceService3Vtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetDeviceAccessInformation                   uintptr
 	GetSession                                   uintptr
@@ -142,7 +142,7 @@ func (v *iGattDeviceService3) GetCharacteristicsAsync() (*foundation.IAsyncOpera
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -158,7 +158,7 @@ func (v *iGattDeviceService3) GetCharacteristicsWithCacheModeAsync(cacheMode blu
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

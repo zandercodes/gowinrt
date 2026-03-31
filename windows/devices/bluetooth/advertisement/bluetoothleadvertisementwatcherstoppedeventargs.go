@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/devices/bluetooth"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureBluetoothLEAdvertisementWatcherStoppedEventArgs string = "rc(Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementWatcherStoppedEventArgs;{dd40f84d-e7b9-43e3-9c04-0685d085fd8c})"
 
 type BluetoothLEAdvertisementWatcherStoppedEventArgs struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *BluetoothLEAdvertisementWatcherStoppedEventArgs) GetError() (bluetooth.BluetoothError, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiBluetoothLEAdvertisementWatcherStoppedEventArgs))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiBluetoothLEAdvertisementWatcherStoppedEventArgs))
 	defer itf.Release()
 	v := (*iBluetoothLEAdvertisementWatcherStoppedEventArgs)(unsafe.Pointer(itf))
 	return v.GetError()
@@ -30,11 +30,11 @@ const GUIDiBluetoothLEAdvertisementWatcherStoppedEventArgs string = "dd40f84d-e7
 const SignatureiBluetoothLEAdvertisementWatcherStoppedEventArgs string = "{dd40f84d-e7b9-43e3-9c04-0685d085fd8c}"
 
 type iBluetoothLEAdvertisementWatcherStoppedEventArgs struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iBluetoothLEAdvertisementWatcherStoppedEventArgsVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetError uintptr
 }
@@ -52,7 +52,7 @@ func (v *iBluetoothLEAdvertisementWatcherStoppedEventArgs) GetError() (bluetooth
 	)
 
 	if hr != 0 {
-		return bluetooth.BluetoothErrorSuccess, ole.NewError(hr)
+		return bluetooth.BluetoothErrorSuccess, winrt.NewError(hr)
 	}
 
 	return out, nil

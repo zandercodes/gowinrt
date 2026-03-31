@@ -8,19 +8,19 @@ package streams
 import (
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const GUIDIRandomAccessStreamWithContentType string = "cc254827-4b3d-438f-9232-10c76bc7e038"
 const SignatureIRandomAccessStreamWithContentType string = "{cc254827-4b3d-438f-9232-10c76bc7e038}"
 
 type IRandomAccessStreamWithContentType struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type IRandomAccessStreamWithContentTypeVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 }
 
 func (v *IRandomAccessStreamWithContentType) VTable() *IRandomAccessStreamWithContentTypeVtbl {
@@ -28,14 +28,14 @@ func (v *IRandomAccessStreamWithContentType) VTable() *IRandomAccessStreamWithCo
 }
 
 func (impl *IRandomAccessStreamWithContentType) GetSize() (uint64, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDIRandomAccessStream))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDIRandomAccessStream))
 	defer itf.Release()
 	v := (*IRandomAccessStream)(unsafe.Pointer(itf))
 	return v.GetSize()
 }
 
 func (impl *IRandomAccessStreamWithContentType) ReadAsync(buffer *IBuffer, count uint32, options InputStreamOptions) (*foundation.IAsyncOperationWithProgress, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDIInputStream))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDIInputStream))
 	defer itf.Release()
 	v := (*IInputStream)(unsafe.Pointer(itf))
 	return v.ReadAsync(buffer, count, options)

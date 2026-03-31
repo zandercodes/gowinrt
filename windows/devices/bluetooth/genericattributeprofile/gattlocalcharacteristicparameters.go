@@ -9,19 +9,19 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation/collections"
 	"github.com/zandercodes/gowinrt/windows/storage/streams"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattLocalCharacteristicParameters string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattLocalCharacteristicParameters;{faf73db4-4cff-44c7-8445-040e6ead0063})"
 
 type GattLocalCharacteristicParameters struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func NewGattLocalCharacteristicParameters() (*GattLocalCharacteristicParameters, error) {
-	inspectable, err := ole.RoActivateInstance("Windows.Devices.Bluetooth.GenericAttributeProfile.GattLocalCharacteristicParameters")
+	inspectable, err := winrt.RoActivateInstance("Windows.Devices.Bluetooth.GenericAttributeProfile.GattLocalCharacteristicParameters")
 	if err != nil {
 		return nil, err
 	}
@@ -29,77 +29,77 @@ func NewGattLocalCharacteristicParameters() (*GattLocalCharacteristicParameters,
 }
 
 func (impl *GattLocalCharacteristicParameters) SetStaticValue(value *streams.IBuffer) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristicParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristicParameters))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristicParameters)(unsafe.Pointer(itf))
 	return v.SetStaticValue(value)
 }
 
 func (impl *GattLocalCharacteristicParameters) GetStaticValue() (*streams.IBuffer, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristicParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristicParameters))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristicParameters)(unsafe.Pointer(itf))
 	return v.GetStaticValue()
 }
 
 func (impl *GattLocalCharacteristicParameters) SetCharacteristicProperties(value GattCharacteristicProperties) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristicParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristicParameters))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristicParameters)(unsafe.Pointer(itf))
 	return v.SetCharacteristicProperties(value)
 }
 
 func (impl *GattLocalCharacteristicParameters) GetCharacteristicProperties() (GattCharacteristicProperties, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristicParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristicParameters))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristicParameters)(unsafe.Pointer(itf))
 	return v.GetCharacteristicProperties()
 }
 
 func (impl *GattLocalCharacteristicParameters) SetReadProtectionLevel(value GattProtectionLevel) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristicParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristicParameters))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristicParameters)(unsafe.Pointer(itf))
 	return v.SetReadProtectionLevel(value)
 }
 
 func (impl *GattLocalCharacteristicParameters) GetReadProtectionLevel() (GattProtectionLevel, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristicParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristicParameters))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristicParameters)(unsafe.Pointer(itf))
 	return v.GetReadProtectionLevel()
 }
 
 func (impl *GattLocalCharacteristicParameters) SetWriteProtectionLevel(value GattProtectionLevel) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristicParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristicParameters))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristicParameters)(unsafe.Pointer(itf))
 	return v.SetWriteProtectionLevel(value)
 }
 
 func (impl *GattLocalCharacteristicParameters) GetWriteProtectionLevel() (GattProtectionLevel, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristicParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristicParameters))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristicParameters)(unsafe.Pointer(itf))
 	return v.GetWriteProtectionLevel()
 }
 
 func (impl *GattLocalCharacteristicParameters) SetUserDescription(value string) error {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristicParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristicParameters))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristicParameters)(unsafe.Pointer(itf))
 	return v.SetUserDescription(value)
 }
 
 func (impl *GattLocalCharacteristicParameters) GetUserDescription() (string, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristicParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristicParameters))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristicParameters)(unsafe.Pointer(itf))
 	return v.GetUserDescription()
 }
 
 func (impl *GattLocalCharacteristicParameters) GetPresentationFormats() (*collections.IVector, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattLocalCharacteristicParameters))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattLocalCharacteristicParameters))
 	defer itf.Release()
 	v := (*iGattLocalCharacteristicParameters)(unsafe.Pointer(itf))
 	return v.GetPresentationFormats()
@@ -109,11 +109,11 @@ const GUIDiGattLocalCharacteristicParameters string = "faf73db4-4cff-44c7-8445-0
 const SignatureiGattLocalCharacteristicParameters string = "{faf73db4-4cff-44c7-8445-040e6ead0063}"
 
 type iGattLocalCharacteristicParameters struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattLocalCharacteristicParametersVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	SetStaticValue              uintptr
 	GetStaticValue              uintptr
@@ -140,7 +140,7 @@ func (v *iGattLocalCharacteristicParameters) SetStaticValue(value *streams.IBuff
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -155,7 +155,7 @@ func (v *iGattLocalCharacteristicParameters) GetStaticValue() (*streams.IBuffer,
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -169,7 +169,7 @@ func (v *iGattLocalCharacteristicParameters) SetCharacteristicProperties(value G
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -184,7 +184,7 @@ func (v *iGattLocalCharacteristicParameters) GetCharacteristicProperties() (Gatt
 	)
 
 	if hr != 0 {
-		return GattCharacteristicPropertiesNone, ole.NewError(hr)
+		return GattCharacteristicPropertiesNone, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -198,7 +198,7 @@ func (v *iGattLocalCharacteristicParameters) SetReadProtectionLevel(value GattPr
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -213,7 +213,7 @@ func (v *iGattLocalCharacteristicParameters) GetReadProtectionLevel() (GattProte
 	)
 
 	if hr != 0 {
-		return GattProtectionLevelPlain, ole.NewError(hr)
+		return GattProtectionLevelPlain, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -227,7 +227,7 @@ func (v *iGattLocalCharacteristicParameters) SetWriteProtectionLevel(value GattP
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
@@ -242,14 +242,14 @@ func (v *iGattLocalCharacteristicParameters) GetWriteProtectionLevel() (GattProt
 	)
 
 	if hr != 0 {
-		return GattProtectionLevelPlain, ole.NewError(hr)
+		return GattProtectionLevelPlain, winrt.NewError(hr)
 	}
 
 	return out, nil
 }
 
 func (v *iGattLocalCharacteristicParameters) SetUserDescription(value string) error {
-	valueHStr, err := ole.NewHString(value)
+	valueHStr, err := winrt.NewHString(value)
 	if err != nil {
 		return err
 	}
@@ -260,14 +260,14 @@ func (v *iGattLocalCharacteristicParameters) SetUserDescription(value string) er
 	)
 
 	if hr != 0 {
-		return ole.NewError(hr)
+		return winrt.NewError(hr)
 	}
 
 	return nil
 }
 
 func (v *iGattLocalCharacteristicParameters) GetUserDescription() (string, error) {
-	var outHStr ole.HString
+	var outHStr winrt.HString
 	hr, _, _ := syscall.SyscallN(
 		v.VTable().GetUserDescription,
 		uintptr(unsafe.Pointer(v)),        // this
@@ -275,11 +275,11 @@ func (v *iGattLocalCharacteristicParameters) GetUserDescription() (string, error
 	)
 
 	if hr != 0 {
-		return "", ole.NewError(hr)
+		return "", winrt.NewError(hr)
 	}
 
 	out := outHStr.String()
-	ole.DeleteHString(outHStr)
+	winrt.DeleteHString(outHStr)
 	return out, nil
 }
 
@@ -292,7 +292,7 @@ func (v *iGattLocalCharacteristicParameters) GetPresentationFormats() (*collecti
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

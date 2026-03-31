@@ -9,25 +9,25 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/go-ole/go-ole"
 	"github.com/zandercodes/gowinrt/windows/foundation/collections"
+	"github.com/zandercodes/gowinrt/winrt"
 )
 
 const SignatureGattCharacteristicsResult string = "rc(Windows.Devices.Bluetooth.GenericAttributeProfile.GattCharacteristicsResult;{1194945c-b257-4f3e-9db7-f68bc9a9aef2})"
 
 type GattCharacteristicsResult struct {
-	ole.IUnknown
+	winrt.IUnknown
 }
 
 func (impl *GattCharacteristicsResult) GetStatus() (GattCommunicationStatus, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattCharacteristicsResult))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattCharacteristicsResult))
 	defer itf.Release()
 	v := (*iGattCharacteristicsResult)(unsafe.Pointer(itf))
 	return v.GetStatus()
 }
 
 func (impl *GattCharacteristicsResult) GetCharacteristics() (*collections.IVectorView, error) {
-	itf := impl.MustQueryInterface(ole.NewGUID(GUIDiGattCharacteristicsResult))
+	itf := impl.MustQueryInterface(winrt.NewGUID(GUIDiGattCharacteristicsResult))
 	defer itf.Release()
 	v := (*iGattCharacteristicsResult)(unsafe.Pointer(itf))
 	return v.GetCharacteristics()
@@ -37,11 +37,11 @@ const GUIDiGattCharacteristicsResult string = "1194945c-b257-4f3e-9db7-f68bc9a9a
 const SignatureiGattCharacteristicsResult string = "{1194945c-b257-4f3e-9db7-f68bc9a9aef2}"
 
 type iGattCharacteristicsResult struct {
-	ole.IInspectable
+	winrt.IInspectable
 }
 
 type iGattCharacteristicsResultVtbl struct {
-	ole.IInspectableVtbl
+	winrt.IInspectableVtbl
 
 	GetStatus          uintptr
 	GetProtocolError   uintptr
@@ -61,7 +61,7 @@ func (v *iGattCharacteristicsResult) GetStatus() (GattCommunicationStatus, error
 	)
 
 	if hr != 0 {
-		return GattCommunicationStatusSuccess, ole.NewError(hr)
+		return GattCommunicationStatusSuccess, winrt.NewError(hr)
 	}
 
 	return out, nil
@@ -76,7 +76,7 @@ func (v *iGattCharacteristicsResult) GetCharacteristics() (*collections.IVectorV
 	)
 
 	if hr != 0 {
-		return nil, ole.NewError(hr)
+		return nil, winrt.NewError(hr)
 	}
 
 	return out, nil

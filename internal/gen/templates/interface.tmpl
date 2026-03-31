@@ -2,11 +2,11 @@ const GUID{{.Name}} string = "{{.GUID}}"
 const Signature{{.Name}} string = "{{.Signature}}"
 
 type {{.Name}} struct {
-    ole.IInspectable
+    winrt.IInspectable
 }
 
 type {{.Name}}Vtbl struct {
-    ole.IInspectableVtbl
+    winrt.IInspectableVtbl
 
     {{range .Funcs}}
     {{- if not .InheritedFrom.Name}}
